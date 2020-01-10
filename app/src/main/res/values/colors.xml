@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#FFF</color>
+    <color name="colorPrimaryDark1111">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorC1">#FFD35E</color>
+    <color name="colorC2">#ADDB1F</color>
+    <color name="dialog_title">#FFF</color>
+    <color name="main_b_color">#1F1238</color>
+    <color name="colorFon">#E6A74F</color>
+    <color name="light_gray">#E8E8EC</color>
+    <color name="gray">#9A9A9C</color>
+    <color name="white">#FFFFFF</color>
+</resources>

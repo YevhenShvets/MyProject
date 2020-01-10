@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF">
+
+    <Button
+        android:id="@+id/button_back_fragment"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:shadowRadius="0"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/icon_back"
+        android:textColor="#000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></Button>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.498">
+
+        <EditText
+            android:id="@+id/registration_pass_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/login_fild"
+            android:ems="18"
+            android:fontFamily="serif"
+            android:hint="password"
+            android:inputType="textPassword"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:textColor="#000"
+            android:textColorHint="@color/gray"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registration_varcode_edit" />
+
+        <TextView
+            android:id="@+id/registration_varcode_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="Verification code:"
+            android:textColor="#000"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/registration_varcode_edit"
+            app:layout_constraintStart_toStartOf="@+id/registration_varcode_edit" />
+
+        <EditText
+            android:id="@+id/registration_varcode_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/login_fild"
+            android:ems="18"
+            android:fontFamily="serif"
+            android:hint="verification code"
+            android:inputType="text"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:textColor="#000"
+            android:textColorHint="@color/gray"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registration_email_edit" />
+
+        <EditText
+            android:id="@+id/registration_email_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/login_fild"
+            android:ems="18"
+            android:enabled="false"
+            android:fontFamily="serif"
+            android:hint="email"
+            android:inputType="textEmailAddress"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:textColor="#000"
+            android:textColorHint="@color/gray"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registration_username_edit" />
+
+        <TextView
+            android:id="@+id/registration_email_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="Email:"
+            android:textColor="#000"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/registration_email_edit"
+            app:layout_constraintStart_toStartOf="@+id/registration_email_edit" />
+
+        <TextView
+            android:id="@+id/registration_username_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="Username:"
+            android:textColor="#000"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/registration_username_edit"
+            app:layout_constraintStart_toStartOf="@+id/registration_username_edit"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/registration_username_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/login_fild"
+            android:ems="18"
+            android:fontFamily="serif"
+            android:hint="username"
+            android:inputType="text"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:textColor="#000"
+            android:textColorHint="@color/gray"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/registration_pass_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="sans-serif-smallcaps"
+            android:text="Password:"
+            android:textColor="#000"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/registration_pass_edit"
+            app:layout_constraintStart_toStartOf="@+id/registration_pass_edit" />
+
+        <Button
+            android:id="@+id/register_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/main_button"
+            android:fontFamily="casual"
+            android:paddingLeft="80dp"
+            android:paddingTop="10dp"
+            android:paddingRight="80dp"
+            android:text="Registration"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/registration_pass_edit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registration_pass_edit" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
