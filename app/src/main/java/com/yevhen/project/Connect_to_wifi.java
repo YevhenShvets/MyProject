@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import android.database.DataSetObserver;
 import android.net.ConnectivityManager;
 import android.net.MacAddress;
 import android.net.NetworkCapabilities;
@@ -37,12 +38,14 @@ import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -66,13 +69,25 @@ public class Connect_to_wifi extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_1);
 
-        ConnectWifi();
         upg = (Button)findViewById(R.id.connect_wifi_upg);
         text_ip = (TextView) findViewById(R.id.text_ip);
+
+        ConnectWifi();
+
         upg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConnectWifi();
+                wifi_list.setVisibility(View.INVISIBLE);
+                final LoadingDialog ld = new LoadingDialog(Connect_to_wifi.this);
+                ld.startLoadingDialog();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        wifi_list.setVisibility(View.VISIBLE);
+                        ld.dismissDialog();
+                        ConnectWifi();
+                    }},3000);
             }
         });
     }
@@ -86,6 +101,8 @@ public class Connect_to_wifi extends AppCompatActivity {
             Toast.makeText(context,"Wifi не ввімкнений, але ми ввімкнули", Toast.LENGTH_LONG).show();
             wifiManager.setWifiEnabled(true);
         }
+
+        wifiInfo.getIpAddress();
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
@@ -104,7 +121,6 @@ public class Connect_to_wifi extends AppCompatActivity {
             wifi = new Wifi(img,scanResult.SSID);
             listWifi.add(wifi);
         }
-        //ваіа
 
         MyAdapter adapter = new MyAdapter(this,R.layout.list_item,listWifi);
         wifi_list = (ListView) findViewById(R.id.connect_wifi_list);
@@ -191,11 +207,8 @@ public class Connect_to_wifi extends AppCompatActivity {
                         } else {
                             Toast.makeText(context, "Перевірте введені дані", Toast.LENGTH_LONG).show();
                         }
-
                     }
                 }, 5000);
-
-                // text_ip.setText(wifiManager.getConnectionInfo().getIpAddress());
             }
         });
     }
@@ -299,7 +312,7 @@ public class Connect_to_wifi extends AppCompatActivity {
             if (success) {
             }
             else {
-                Toast.makeText(c,"Помилка  ", Toast.LENGTH_LONG).show();
+                Toast.makeText(c,"Помилка", Toast.LENGTH_LONG).show();
             }
 
         }

@@ -25,7 +25,7 @@
         android:layout_marginTop="10dp"
         android:hint="password"
         android:textColor="@color/main_b_color"
-        android:textColorHint="#969696"
+        android:textColorHint="#F1F1F1"
         android:textSize="20dp"
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@+id/wifi_dialog_ssid"

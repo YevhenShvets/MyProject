@@ -21,14 +21,15 @@
         tools:layout_editor_absoluteX="0dp"></TextView>
 
     <Button
+        android:id="@+id/connect_wifi_upg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/main_back"
+        android:background="@drawable/main_button"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
         android:text="@string/Обновити"
         android:textColor="#29213A"
-        android:id="@+id/connect_wifi_upg"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/connect_wifi_list"></Button>
