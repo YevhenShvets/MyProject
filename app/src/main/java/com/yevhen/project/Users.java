@@ -1,4 +1,4 @@
-package com.yevhen.project.Class;
+package com.yevhen.project;
 
 import androidx.annotation.Nullable;
 

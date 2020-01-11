@@ -33,6 +33,7 @@ public class RegistrationFragment extends Fragment {
 
     private EditText email_fragment;
     private Button button_back_fragment;
+    private Button button_registration;
 
     public RegistrationFragment() {
         // Required empty public constructor
@@ -61,6 +62,7 @@ public class RegistrationFragment extends Fragment {
        View view = inflater.inflate(R.layout.fragment_registration, container, false);
        email_fragment = (EditText) view.findViewById(R.id.registration_email_edit);
        button_back_fragment = (Button) view.findViewById(R.id.button_back_fragment);
+       button_registration = (Button) view.findViewById(R.id.register_button);
 
        button_back_fragment.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -73,7 +75,7 @@ public class RegistrationFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
+
     public void Back() {
         if (mListener != null) {
             mListener.onFragmentInteraction();
