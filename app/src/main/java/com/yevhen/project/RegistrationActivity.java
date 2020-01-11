@@ -98,48 +98,6 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
 
     }
 
-    void Reg(){
-        //РЕЄСРАЦІЯ
-       /* reg_register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                EditText username = (EditText) findViewById(R.id.registration_username_edit);
-                EditText email = (EditText) findViewById(R.id.registration_email_edit);
-                EditText varcode = (EditText) findViewById(R.id.registration_varcode_edit);
-                EditText password = (EditText) findViewById(R.id.registration_pass_edit);
-
-                Users_reg user = new Users_reg(username.getText().toString(),
-                        email.getText().toString(),
-                        varcode.getText().toString(),
-                        password.getText().toString());
-                Call<Void> call = jsonApi.createUsers(user);
-                call.enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if(!response.isSuccessful()){
-                            Toast.makeText(context,"Помилка",Toast.LENGTH_LONG).show();
-                        }
-                        int code = response.code();
-                        switch (code){
-                            case 201: Toast.makeText(context,"Успішно зареєстровано",Toast.LENGTH_LONG).show(); break;
-                            case 400: Toast.makeText(context,"400",Toast.LENGTH_LONG).show(); break;
-                            case 401: Toast.makeText(context,"Email not vercode 401",Toast.LENGTH_LONG).show(); break;
-                            case 500: Toast.makeText(context,"500",Toast.LENGTH_LONG).show(); break;
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-
-                    }
-                });
-
-
-            }
-        });*/
-    }
     public void openFragment(String email){
         RegistrationFragment fragment = RegistrationFragment.newInstance(email);
         FragmentManager fragmentManager = getSupportFragmentManager();

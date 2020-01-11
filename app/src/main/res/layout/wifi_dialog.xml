@@ -10,7 +10,7 @@
         android:id="@+id/wifi_dialog_ssid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:enabled="false"
         android:forceDarkAllowed="false"
         android:textColor="@color/main_b_color"
@@ -63,5 +63,16 @@
         tools:layout_editor_absoluteX="159dp">
 
     </TextView>
+
+    <ProgressBar
+        android:id="@+id/wifi_dialog_progressbar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

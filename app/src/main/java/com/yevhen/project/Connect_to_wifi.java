@@ -44,6 +44,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,15 +59,16 @@ public class Connect_to_wifi extends AppCompatActivity {
     List<Wifi> listWifi;
     ListView wifi_list;
     Button upg;
+    TextView text_ip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_1);
 
-
         ConnectWifi();
         upg = (Button)findViewById(R.id.connect_wifi_upg);
+        text_ip = (TextView) findViewById(R.id.text_ip);
         upg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,8 +95,13 @@ public class Connect_to_wifi extends AppCompatActivity {
         Wifi wifi = new Wifi(1,"");
         listWifi = new ArrayList<>();
         List<ScanResult> a = wifiManager.getScanResults();
+        int img = 1;
         for (ScanResult scanResult : a) {
-            wifi = new Wifi(R.drawable.wifi_image,scanResult.SSID);
+            if(scanResult.level>=-50) img = R.drawable.wifi_icons_1;
+            else if(scanResult.level>=-60) img = R.drawable.wifi_icons_2;
+            else if(scanResult.level>=-70) img = R.drawable.wifi_icons_3;
+            else if(scanResult.level< -70) img= R.drawable.wifi_icons_4;
+            wifi = new Wifi(img,scanResult.SSID);
             listWifi.add(wifi);
         }
         //ваіа
@@ -112,6 +119,7 @@ public class Connect_to_wifi extends AppCompatActivity {
         final Button buttonOk = dialog.findViewById(R.id.wifi_dialog_buttonOk);
         final Button buttonClose =  dialog.findViewById(R.id.wifi_dialog_buttonClose);
         final TextView textcapabilities = dialog.findViewById(R.id.wifi_dialog_capabilities);
+        final ProgressBar loading = dialog.findViewById(R.id.wifi_dialog_progressbar);
 
         wifi_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -155,23 +163,39 @@ public class Connect_to_wifi extends AppCompatActivity {
         buttonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String ssid, pass = "", capabilities = "";
                 pass = pass_dialog.getText().toString();
                 ssid = ssid_dialog.getText().toString();
                 capabilities = textcapabilities.getText().toString();
                 Connect_to_wifi(ssid, pass, capabilities);
-                SystemClock.sleep(5000);
-                String s1 ="",s;
-                s = wifiManager.getConnectionInfo().getSSID().toString();
-                for(int i = 1;i<s.length()-1;i++){
-                    s1= s1+ s.charAt(i);
-                }
-                 if(s1.equals(ssid_dialog.getText().toString())){
-                     dialog.dismiss();
-                     Toast.makeText(context, "Підключено", Toast.LENGTH_LONG).show();
-                 } else {
-                     Toast.makeText(context, "Перевірте введені дані", Toast.LENGTH_LONG).show();
-                 }
+
+                //Затрамка
+                loading.setVisibility(View.VISIBLE);
+                buttonOk.setEnabled(false);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        loading.setVisibility(View.INVISIBLE);
+                        buttonOk.setEnabled(true);
+                        String s1 ="",s;
+
+                        s = wifiManager.getConnectionInfo().getSSID().toString();
+                        for(int i = 1;i<s.length()-1;i++){
+                            s1= s1+ s.charAt(i);
+                        }
+                        if(s1.equals(ssid_dialog.getText().toString())){
+                            dialog.dismiss();
+                            pass_dialog.setText("");
+                            Toast.makeText(context, "Підключено", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(context, "Перевірте введені дані", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }, 5000);
+
+                // text_ip.setText(wifiManager.getConnectionInfo().getIpAddress());
             }
         });
     }
@@ -273,13 +297,6 @@ public class Connect_to_wifi extends AppCompatActivity {
             boolean success = intent.getBooleanExtra(
                     WifiManager.EXTRA_RESULTS_UPDATED, false);
             if (success) {
-                   /* Wifi wifi = new Wifi(1,"");
-                    tv1 = findViewById(R.id.tv1);
-                    List<ScanResult>  a = wifiManager.getScanResults();
-                    for (ScanResult scanResult : a) {
-                        wifi = new Wifi(R.mipmap.ic_launcher,scanResult.SSID);
-                        listWifi.add(wifi);
-                    }*/
             }
             else {
                 Toast.makeText(c,"Помилка  ", Toast.LENGTH_LONG).show();
