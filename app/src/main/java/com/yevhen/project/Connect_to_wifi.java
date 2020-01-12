@@ -51,10 +51,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Connect_to_wifi extends AppCompatActivity {
     WifiManager wifiManager;
@@ -102,7 +110,7 @@ public class Connect_to_wifi extends AppCompatActivity {
             wifiManager.setWifiEnabled(true);
         }
 
-        wifiInfo.getIpAddress();
+        text_ip.setText(Function.getIp(context));
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
@@ -317,4 +325,27 @@ public class Connect_to_wifi extends AppCompatActivity {
 
         }
     };
+
+    private void Connect_HUB(String ip){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ip)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonApi jsonApi = retrofit.create(JsonApi.class);
+
+        Call<Void> call = jsonApi.setHub(ip);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(context,"URAAAAAA",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(context,"FAIL",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

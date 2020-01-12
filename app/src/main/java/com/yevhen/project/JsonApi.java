@@ -16,4 +16,7 @@ public interface JsonApi {
     @Headers("Content-Type: application/json")
     @POST("users/auth")
     Call<Users> getAuthUsers(@Body Users_log users);
+
+    @POST
+    Call<Void> setHub(@Body String str);
 }
