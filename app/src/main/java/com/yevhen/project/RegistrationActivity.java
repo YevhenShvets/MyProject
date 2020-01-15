@@ -3,11 +3,11 @@ package com.yevhen.project;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import com.yevhen.*;
+
+import com.yevhen.project.Class.Email_reg;
+import com.yevhen.project.Class.Users_reg;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;

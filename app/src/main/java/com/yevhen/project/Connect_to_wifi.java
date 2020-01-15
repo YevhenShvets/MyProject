@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.yevhen.project.Class.Info_arduino;
+import com.yevhen.project.Class.Wifi;
 
 import java.util.ArrayList;
 import java.util.List;

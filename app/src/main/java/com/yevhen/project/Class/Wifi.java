@@ -1,4 +1,4 @@
-package com.yevhen.project;
+package com.yevhen.project.Class;
 
 class Wifi {
     int img;

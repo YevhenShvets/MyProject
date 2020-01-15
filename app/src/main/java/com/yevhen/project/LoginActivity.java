@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.yevhen.project.Class.Users;
+import com.yevhen.project.Class.Users_log;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

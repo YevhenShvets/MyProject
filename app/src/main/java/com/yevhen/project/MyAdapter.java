@@ -11,6 +11,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.yevhen.project.Class.Wifi;
+
 import java.util.List;
 
 class MyAdapter extends ArrayAdapter<Wifi> {
