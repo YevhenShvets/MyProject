@@ -2,8 +2,11 @@ package com.yevhen.project;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 
 public interface JsonApi {
@@ -17,6 +20,10 @@ public interface JsonApi {
     @POST("users/auth")
     Call<Users> getAuthUsers(@Body Users_log users);
 
-    @POST
-    Call<Void> setHub(@Body String str);
+    @POST("options")
+    Call<Void> setHub(@Query("a")String a,
+                      @Query("b")String b,
+                      @Query("c")String c,
+                      @Query("d")String d,
+                      @Query("e")String e);
 }

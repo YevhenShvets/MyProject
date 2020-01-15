@@ -29,11 +29,15 @@
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/NoActionBar" />
-        <activity android:name=".RegistrationActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".Connect_to_wifi" />
-        <activity android:name=".MainActivity">
+            android:theme="@style/NOACTIONBAR_" />
+        <activity android:name=".RegistrationActivity"
+            android:theme="@style/LOGINTHEME"/>
+        <activity android:name=".LoginActivity"
+            android:theme="@style/LOGINTHEME"/>
+        <activity android:name=".Connect_to_wifi"
+            android:theme="@style/NOACTIONBAR_"/>
+        <activity android:name=".MainActivity"
+            android:theme="@style/NOACTIONBAR_">
 
         </activity>
 

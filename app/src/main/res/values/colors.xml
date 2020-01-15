@@ -13,4 +13,6 @@
     <color name="gray">#9A9A9C</color>
     <color name="white">#FFFFFF</color>
     <color name="nav_back">#EB893F</color>
+    <color name="azure">#AC1515</color>
+    <color name="black">#000000</color>
 </resources>

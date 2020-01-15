@@ -70,7 +70,6 @@ public class Connect_to_wifi extends AppCompatActivity {
     List<Wifi> listWifi;
     ListView wifi_list;
     Button upg;
-    TextView text_ip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +77,6 @@ public class Connect_to_wifi extends AppCompatActivity {
         setContentView(R.layout.layout_1);
 
         upg = (Button)findViewById(R.id.connect_wifi_upg);
-        text_ip = (TextView) findViewById(R.id.text_ip);
-
         ConnectWifi();
 
         upg.setOnClickListener(new View.OnClickListener() {
@@ -109,8 +106,6 @@ public class Connect_to_wifi extends AppCompatActivity {
             Toast.makeText(context,"Wifi не ввімкнений, але ми ввімкнули", Toast.LENGTH_LONG).show();
             wifiManager.setWifiEnabled(true);
         }
-
-        text_ip.setText(Function.getIp(context));
 
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
@@ -187,36 +182,41 @@ public class Connect_to_wifi extends AppCompatActivity {
         buttonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Info_arduino info_arduino;
                 String ssid, pass = "", capabilities = "";
                 pass = pass_dialog.getText().toString();
                 ssid = ssid_dialog.getText().toString();
+
+                //треба удалити!!!
                 capabilities = textcapabilities.getText().toString();
-                Connect_to_wifi(ssid, pass, capabilities);
+
+                info_arduino = new Info_arduino();
+                //ssid
+                info_arduino.setA(ssid);
+                //password
+                info_arduino.setB(pass);
+                //ip_server
+                info_arduino.setC("34.76.99.94");
+                //port_server
+                info_arduino.setD("8080");
+                //_server_addres
+                info_arduino.setE("/server-1.0/endpoint");
+
+
+
+                Connect_HUB(info_arduino);
 
                 //Затрамка
-                loading.setVisibility(View.VISIBLE);
+               /* loading.setVisibility(View.VISIBLE);
                 buttonOk.setEnabled(false);
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     public void run() {
                         loading.setVisibility(View.INVISIBLE);
                         buttonOk.setEnabled(true);
-                        String s1 ="",s;
-
-                        s = wifiManager.getConnectionInfo().getSSID().toString();
-                        for(int i = 1;i<s.length()-1;i++){
-                            s1= s1+ s.charAt(i);
-                        }
-                        if(s1.equals(ssid_dialog.getText().toString())){
-                            dialog.dismiss();
-                            pass_dialog.setText("");
-                            Toast.makeText(context, "Підключено", Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(context, "Перевірте введені дані", Toast.LENGTH_LONG).show();
-                        }
+                        dialog.dismiss();
                     }
-                }, 5000);
+                }, 5000);*/
             }
         });
     }
@@ -326,24 +326,25 @@ public class Connect_to_wifi extends AppCompatActivity {
         }
     };
 
-    private void Connect_HUB(String ip){
+    private void Connect_HUB(Info_arduino info){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ip)
+                .baseUrl("http://192.168.1.1")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         JsonApi jsonApi = retrofit.create(JsonApi.class);
 
-        Call<Void> call = jsonApi.setHub(ip);
+        Call<Void> call = jsonApi.setHub(info.getA(),info.getB(),info.getC(),info.getD(),info.getE());
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Toast.makeText(context,"URAAAAAA",Toast.LENGTH_SHORT).show();
+                int code = response.code();
+                Toast.makeText(context,"Дані успішно передані, подивіться на екран",Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(context,"FAIL",Toast.LENGTH_SHORT).show();
+                Toast.makeText(context,"Помилка: "+ t.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
     }
