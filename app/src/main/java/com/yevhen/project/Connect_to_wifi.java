@@ -1,5 +1,6 @@
 package com.yevhen.project;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
@@ -17,6 +18,7 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -47,6 +49,29 @@ public class Connect_to_wifi extends AppCompatActivity {
     List<Wifi> listWifi;
     ListView wifi_list;
     Button upg;
+    Button open_settings;
+
+    static int REQUEST_WIFI_STATE = 1;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        //Перевірка, чи підключено до WIFI
+        if(requestCode == REQUEST_WIFI_STATE){
+            WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+            if(wifiManager!=null) {
+                if (wifiManager.getConnectionInfo().getSSID() != "<unknown ssid>") {
+                    Toast.makeText(Connect_to_wifi.this, "Підключено до " + wifiManager.getConnectionInfo().getSSID(), Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(Connect_to_wifi.this, "Ви не підключилися", Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                Toast.makeText(Connect_to_wifi.this, "Виникла помилка, повторно підключіться до WIFI", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +79,17 @@ public class Connect_to_wifi extends AppCompatActivity {
         setContentView(R.layout.layout_1);
 
         upg = (Button)findViewById(R.id.connect_wifi_upg);
+        open_settings = (Button) findViewById(R.id.connect_wifi_open_settings_button);
+
         ConnectWifi();
 
+        open_settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                startActivityForResult(intent,REQUEST_WIFI_STATE);
+            }
+        });
         upg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +106,12 @@ public class Connect_to_wifi extends AppCompatActivity {
                     }},3000);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        ConnectWifi();
+        super.onResume();
     }
 
     public void ConnectWifi(){
@@ -155,6 +195,7 @@ public class Connect_to_wifi extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                pass_dialog.setText("");
             } });
         buttonOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -316,7 +357,8 @@ public class Connect_to_wifi extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 int code = response.code();
-                Toast.makeText(context,"Дані успішно передані, подивіться на екран",Toast.LENGTH_SHORT).show();
+                if(code == 200)
+                    Toast.makeText(context,"Дані успішно передані, подивіться на екран",Toast.LENGTH_SHORT).show();
             }
 
             @Override

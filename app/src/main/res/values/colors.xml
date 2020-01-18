@@ -15,4 +15,7 @@
     <color name="nav_back">#EB893F</color>
     <color name="azure">#AC1515</color>
     <color name="black">#000000</color>
+    <color name="none">#25FFFFFF</color>
+    <color name="orange">#EE9828</color>
+    <color name="green">#66BB6A</color>
 </resources>

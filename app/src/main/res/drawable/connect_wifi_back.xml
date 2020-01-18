@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<inset xmlns:android="http://schemas.android.com/apk/res/android">
-    <ripple android:color="?attr/colorControlHighlight">
-        <item>
-            <shape android:shape="rectangle">
-                <gradient
-                    android:type="linear"
-                    android:gradientRadius="180"
-                    android:startColor="#FDA218"
-                    android:endColor="#FAEE88"
-                    android:angle="225"></gradient>
-            </shape>
-        </item>
-    </ripple>
-</inset>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <gradient
+        android:type="linear"
+        android:endColor="#F3F2F2"
+        android:startColor="#FFFFFF"
+        android:angle="225"></gradient>
+</shape>
