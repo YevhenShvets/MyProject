@@ -7,6 +7,8 @@ import android.net.DhcpInfo;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.widget.Button;
+import android.widget.EditText;
 
 import java.math.BigInteger;
 import java.net.InetAddress;
@@ -73,5 +75,32 @@ public final class Function extends Application {
             e.printStackTrace();
         }
         return "";
+    }
+
+    static boolean isValue(String str, char ch){
+        for(int i=0;i<str.length();i++){
+            if(str.charAt(i)==ch) return true;
+        }
+        return false;
+    }
+
+    static void setEnabled_button(Button button, Boolean bool){
+        if(button ==null) return;
+        else{
+            if(bool == true) {
+                button.setEnabled(true);
+                button.setAlpha(1f);
+            }else{
+                button.setEnabled(false);
+                button.setAlpha(0.6f);
+            }
+        }
+    }
+    static boolean isText(EditText editText){
+        if(editText==null) return false;
+        else{
+            if(editText.length()>0) return true;
+        }
+        return false;
     }
 }

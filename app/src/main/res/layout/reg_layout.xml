@@ -9,13 +9,13 @@
 
     <EditText
         android:id="@+id/reg_email_post_edit"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:background="@drawable/login_fild"
         android:ems="18"
-        android:fontFamily="serif"
+        android:fontFamily="@font/my_font_chalet"
         android:hint="email"
         android:inputType="textEmailAddress"
         android:paddingTop="12dp"
@@ -33,33 +33,50 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:fontFamily="sans-serif-smallcaps"
+        android:fontFamily="@font/my_font_noto"
         android:text="Email:"
         android:textColor="#000"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/reg_email_post_edit"
-        app:layout_constraintStart_toStartOf="@+id/reg_email_post_edit"
-        />
+        app:layout_constraintStart_toStartOf="@+id/reg_email_post_edit" />
 
     <Button
         android:id="@+id/reg_email_post_button"
-        style="@style/Widget.AppCompat.Button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/main_button"
-        android:fontFamily="casual"
-        android:paddingTop="1dp"
-        android:paddingBottom="1dp"
+        android:enabled="false"
+        android:fontFamily="@font/my_font_sony"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
         android:stateListAnimator="@null"
-        android:text="POST"
+        android:text="@string/POST"
+        android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/reg_email_post_edit"
         app:layout_constraintTop_toBottomOf="@+id/reg_email_post_edit" />
+
+    <TextView
+        android:id="@+id/reg_error_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/font_inter_regular"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/eror_color"
+        app:layout_constraintEnd_toEndOf="@+id/reg_email_post_edit"
+        app:layout_constraintStart_toStartOf="@+id/reg_email_post_edit"
+        app:layout_constraintTop_toBottomOf="@+id/reg_email_post_edit" />
+
     <FrameLayout
         android:id="@+id/registration_framelayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        ></FrameLayout>
+        >
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

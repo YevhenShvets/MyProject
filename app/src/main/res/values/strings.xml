@@ -2,9 +2,11 @@
     <string name="app_name">Project</string>
     <string name="Cancel">Cancel</string>
     <string name="Ok">Ok</string>
+    <string name="POST">Відправити</string>
     <string name="connect_to_wifi">Connect to WiFi</string>
     <string name="Connect">Connect</string>
     <string name="Login">Login</string>
+    <string name="Registratiom">Registration</string>
     <string name="Back">Back</string>
     <string name="Обновити">Обновити</string>
     <string name="connect_to_wifi_text">Виберіть точку доступу вашого WIFI</string>

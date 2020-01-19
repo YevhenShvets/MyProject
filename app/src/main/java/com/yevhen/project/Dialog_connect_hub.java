@@ -71,7 +71,7 @@ public class Dialog_connect_hub extends Dialog implements View.OnClickListener {
 
         ssid_dialog.setText(ssid);
         textcapabilities.setText(capa);
-        ispass = false;
+        ispass = true;
 
         buttonClose.setOnClickListener(this);
         buttonOk.setOnClickListener(this);
@@ -125,31 +125,22 @@ public class Dialog_connect_hub extends Dialog implements View.OnClickListener {
                 info_arduino.setE("/server-1.0/endpoint");
 
                 Connect_HUB(info_arduino);
-                //Затрамка
-               /* loading.setVisibility(View.VISIBLE);
-                buttonOk.setEnabled(false);
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    public void run() {
-                        loading.setVisibility(View.INVISIBLE);
-                        buttonOk.setEnabled(true);
-                        dialog.dismiss();
-                    }
-                }, 5000);*/
                 break;
             }
             case R.id.wifi_dialog_show_wifi_icon: {
-                if(show_pass.getAlpha()<1f) break;
+                if(pass_dialog.length()==0) break;
                 else {
                     if (ispass) {
                         pass_dialog.setTransformationMethod(PasswordTransformationMethod.getInstance());
                         show_pass.setImageResource(R.drawable.wifi_dialog_pass_show_icon);
+                        pass_dialog.setSelection(pass_dialog.length());
                         ispass = false;
                         break;
                     }
                     if (!ispass) {
                         pass_dialog.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                         show_pass.setImageResource(R.drawable.wifi_dialog_pass_noshow_icon);
+                        pass_dialog.setSelection(pass_dialog.length());
                         ispass = true;
                         break;
                     }
@@ -167,6 +158,19 @@ public class Dialog_connect_hub extends Dialog implements View.OnClickListener {
                 .build();
 
         JsonApi jsonApi = retrofit.create(JsonApi.class);
+
+
+        //Затрамка
+               /* loading.setVisibility(View.VISIBLE);
+                buttonOk.setEnabled(false);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        loading.setVisibility(View.INVISIBLE);
+                        buttonOk.setEnabled(true);
+                        dismiss();
+                    }
+                }, 5000);*/
 
         Call<Void> call = jsonApi.setHub(info.getA(),info.getB(),info.getC(),info.getD(),info.getE());
         call.enqueue(new Callback<Void>() {

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +26,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity {
     Context context = this;
     TextView registr_text;
+    TextView error_text;
     Button login_button;
+    EditText email;
+    EditText pass;
     Retrofit retrofit;
     JsonApi jsonApi;
     @Override
@@ -40,6 +45,45 @@ public class LoginActivity extends AppCompatActivity {
 
         registr_text = (TextView)findViewById(R.id.login_registration);
         login_button = (Button) findViewById(R.id.logib_button);
+        email = (EditText) findViewById(R.id.login_email);
+        pass = (EditText) findViewById(R.id.login_pass);
+        error_text = (TextView) findViewById(R.id.login_error_text);
+
+        Function.setEnabled_button(login_button,false);
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                 change(email,pass,error_text,1);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        pass.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                change(email,pass,error_text,2);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
 
         registr_text.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,8 +96,7 @@ public class LoginActivity extends AppCompatActivity {
         login_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                //Якщо є доступ до інтернету
                 if(new Function().isOnline(context)) {
                     //Затримка, щоб не було багато раз клікало
                     login_button.setClickable(false);
@@ -63,9 +106,6 @@ public class LoginActivity extends AppCompatActivity {
                             login_button.setClickable(true);
                         }
                     }, 2000);
-
-                    EditText email = (EditText) findViewById(R.id.login_email);
-                    EditText pass = (EditText) findViewById(R.id.login_pass);
 
                     Call<Users> call = jsonApi.getAuthUsers(new Users_log(email.getText().toString(), pass.getText().toString()));
                     call.enqueue(new Callback<Users>() {
@@ -107,5 +147,41 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void change(EditText e1, EditText e2,TextView error,int i) {
+        if (e1 != null && e2 != null && error != null){
+            if (e1.length() == 0 && e2.length() == 0) error.setText("");
+            if(i==1){
+                //EMAIL
+                if( Function.isValue(e1.getText().toString(),'@') && Function.isValue(e1.getText().toString(),'.'))
+                {
+                    if(e2.length()!=0) {
+                        Function.setEnabled_button(login_button, true);
+                        error.setText("");
+                    }else{
+                        error.setText("Поле \"password\" пусте");
+                    }
+                }
+                else{
+                    error.setText("Перевірте email");
+                    if(login_button.isEnabled())
+                        Function.setEnabled_button(login_button,false);
+                }
+            }else{
+                //PASS
+                if(e2.length()==0) {
+                    Function.setEnabled_button(login_button,false);
+                    error.setText("Поле \"password\" пусте");
+                }
+                else{
+                    if(Function.isValue(e1.getText().toString(),'@') && Function.isValue(e1.getText().toString(),'.')) {
+                        Function.setEnabled_button(login_button,true);
+                        error.setText("");
+                    }else{
+                        error.setText("Перевірте email");
+                    }
+                }
+            }
+        }else return;
+    }
 
 }

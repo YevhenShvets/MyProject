@@ -10,10 +10,13 @@ import com.yevhen.project.Class.Users_reg;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import retrofit2.Call;
@@ -27,6 +30,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
     FrameLayout fragment_framelayout;
     Button post_vercode_button;
     EditText post_email_edit;
+    TextView error;
     JsonApi jsonApi;
     Retrofit retrofit;
     String email;
@@ -39,12 +43,43 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
 
         post_email_edit = (EditText) findViewById(R.id.reg_email_post_edit);
         post_vercode_button = (Button) findViewById(R.id.reg_email_post_button);
+        error = (TextView) findViewById(R.id.reg_error_text);
+        Function.setEnabled_button(post_vercode_button,false);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://34.76.99.94:5050")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         jsonApi = retrofit.create(JsonApi.class);
+
+        post_email_edit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (post_email_edit.length() == 0){
+                    if (post_email_edit.isEnabled())
+                        Function.setEnabled_button(post_vercode_button, false);
+                    error.setText("");
+                }else {
+                    if (Function.isValue(post_email_edit.getText().toString(), '@') && Function.isValue(post_email_edit.getText().toString(), '.')) {
+                        Function.setEnabled_button(post_vercode_button, true);
+                        error.setText("");
+                    } else {
+                        error.setText("Перевірте email");
+                        if (post_email_edit.isEnabled())
+                            Function.setEnabled_button(post_vercode_button, false);
+                    }
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         post_vercode_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +150,7 @@ public class RegistrationActivity extends AppCompatActivity implements Registrat
 
 
     public void REGISTER_ONCLICK(View view) {
+        //Якщо є доступ в інтернет, то можна реєструватися
         if(new Function().isOnline(context)) {
             EditText username = (EditText) findViewById(R.id.registration_username_edit);
             EditText email = (EditText) findViewById(R.id.registration_email_edit);

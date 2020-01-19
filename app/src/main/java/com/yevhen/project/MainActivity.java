@@ -65,6 +65,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*final LoadingDialog loadingDialog = new LoadingDialog(MainActivity.this);
+        loadingDialog.show();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingDialog.dismiss();
+            }
+        },2000);*/
+
         logo = findViewById(R.id.main_logo);
         logo.setOnClickListener(new View.OnClickListener() {
             @Override

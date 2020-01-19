@@ -88,13 +88,13 @@ public class Connect_hub_fragment extends Fragment {
             public void onClick(View v) {
                 wifi_list.setVisibility(View.INVISIBLE);
                 final LoadingDialog ld = new LoadingDialog(getActivity());
-                ld.startLoadingDialog();
+                ld.show();
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         wifi_list.setVisibility(View.VISIBLE);
-                        ld.dismissDialog();
+                        ld.dismiss();
                         ConnectWifi();
                     }},3000);
             }
