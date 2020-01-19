@@ -183,6 +183,7 @@ public class Connect_to_wifi extends AppCompatActivity {
                     int displayHeight = displayMetrics.heightPixels;
 
                     WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+
                     lp.copyFrom(dialog.getWindow().getAttributes());
                     lp.height = (int) (displayHeight * 0.5f);
                     lp.width = WindowManager.LayoutParams.FILL_PARENT;
