@@ -6,11 +6,16 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
 /**
@@ -34,6 +39,8 @@ public class RegistrationFragment extends Fragment {
     private EditText email_fragment;
     private Button button_back_fragment;
     private Button button_registration;
+    private TextView error;
+    private EditText vercode,password,username;
 
     public RegistrationFragment() {
         // Required empty public constructor
@@ -63,6 +70,50 @@ public class RegistrationFragment extends Fragment {
        email_fragment = (EditText) view.findViewById(R.id.registration_email_edit);
        button_back_fragment = (Button) view.findViewById(R.id.button_back_fragment);
        button_registration = (Button) view.findViewById(R.id.register_button);
+       error = (TextView) view.findViewById(R.id.registration_error_text);
+        username = (EditText) view.findViewById(R.id.registration_username_edit);
+        vercode = (EditText) view.findViewById(R.id.registration_varcode_edit);
+        password = (EditText) view.findViewById(R.id.registration_pass_edit);
+
+        Function.setEnabled_button(button_registration,false);
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(username.length() == 0 && vercode.length()== 0 && password.length() ==0){
+                    error.setText("");
+                    if(button_registration.isEnabled())
+                        Function.setEnabled_button( button_registration,false);
+                }else {
+                    if(username.length() == 0 || vercode.length() ==0 || password.length() == 0)
+                    {
+                        error.setText("Перевірте поля");
+                        if(button_registration.isEnabled())
+                            Function.setEnabled_button( button_registration,false);
+                        return;
+                    }
+                    else {
+                        error.setText("");
+                        Function.setEnabled_button( button_registration,true);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+
+        username.addTextChangedListener(textWatcher);
+        vercode.addTextChangedListener(textWatcher);
+        password.addTextChangedListener(textWatcher);
+
 
        button_back_fragment.setOnClickListener(new View.OnClickListener() {
            @Override

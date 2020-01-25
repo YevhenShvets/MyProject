@@ -103,4 +103,21 @@ public final class Function extends Application {
         }
         return false;
     }
+
+    static boolean notSpec(char a){
+        switch (a){
+            case '1':
+            case '2':
+                case '3':
+            case '4':
+                case '5':
+            case '6':
+                case '7':
+            case '8':
+                case '9':
+            case '0': return false;
+        }
+        return true;
+    }
+
 }

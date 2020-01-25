@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +32,8 @@ public class LoginActivity extends AppCompatActivity {
     Button login_button;
     EditText email;
     EditText pass;
+    CheckBox save_check;
+    TextView tmp;
     Retrofit retrofit;
     JsonApi jsonApi;
     @Override
@@ -48,6 +52,10 @@ public class LoginActivity extends AppCompatActivity {
         email = (EditText) findViewById(R.id.login_email);
         pass = (EditText) findViewById(R.id.login_pass);
         error_text = (TextView) findViewById(R.id.login_error_text);
+        save_check = (CheckBox) findViewById(R.id.login_save);
+        tmp = (TextView) findViewById(R.id.login_text_tmp);
+
+        getLOGIN();
 
         Function.setEnabled_button(login_button,false);
         email.addTextChangedListener(new TextWatcher() {
@@ -106,6 +114,10 @@ public class LoginActivity extends AppCompatActivity {
                             login_button.setClickable(true);
                         }
                     }, 2000);
+
+                    if(save_check.isChecked()){
+                        saveLogin();
+                    }
 
                     Call<Users> call = jsonApi.getAuthUsers(new Users_log(email.getText().toString(), pass.getText().toString()));
                     call.enqueue(new Callback<Users>() {
@@ -183,5 +195,34 @@ public class LoginActivity extends AppCompatActivity {
             }
         }else return;
     }
+
+    private boolean login_save(){
+        SharedPreferences myPreferences = getSharedPreferences("LOGIN",MODE_PRIVATE);
+        return myPreferences.getBoolean("LOGIN_SAVE",false);
+    }
+
+
+    private void saveLogin(){
+        SharedPreferences myPreferences = getSharedPreferences("LOGIN",MODE_PRIVATE);
+        SharedPreferences.Editor editor = myPreferences.edit();
+
+        editor.putBoolean("LOGIN_SAVE",true);
+        editor.putString("LOGIN_EMAIL",email.getText().toString());
+        editor.putString("LOGIN_PASS",pass.getText().toString());
+        editor.apply();
+    }
+
+    private void getLOGIN(){
+        SharedPreferences myPreferences = getSharedPreferences("LOGIN",MODE_PRIVATE);
+        if(login_save()){
+            String e,p;
+            e= myPreferences.getString("LOGIN_EMAIL","");
+            p = myPreferences.getString("LOGIN_PASS","");
+            tmp.setText(e + "\n"+p);
+        }else{
+            tmp.setText("NOT_SAVE");
+        }
+    }
+
 
 }

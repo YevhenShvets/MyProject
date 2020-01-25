@@ -7,6 +7,7 @@
     <string name="Connect">Connect</string>
     <string name="Login">Login</string>
     <string name="Registratiom">Registration</string>
+    <string name="Save_login">Зберегти дані</string>
     <string name="Back">Back</string>
     <string name="Обновити">Обновити</string>
     <string name="connect_to_wifi_text">Виберіть точку доступу вашого WIFI</string>
