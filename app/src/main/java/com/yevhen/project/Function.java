@@ -120,4 +120,10 @@ public final class Function extends Application {
         return true;
     }
 
+    static int toint(String a){
+        int zn = new Integer(a);
+        return zn;
+    }
+
+
 }
