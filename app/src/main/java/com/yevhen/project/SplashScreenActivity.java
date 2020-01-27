@@ -32,7 +32,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 img1.setVisibility(View.INVISIBLE);
                 img3.setVisibility(View.VISIBLE);
             }
-        },10);
+        },200);
 
         Handler handler2 = new Handler();
         handler2.postDelayed(new Runnable() {
@@ -41,7 +41,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 img3.setVisibility(View.INVISIBLE);
                 img4.setVisibility(View.VISIBLE);
             }
-        },24);
+        },350);
 
         Handler handler3 = new Handler();
         handler1.postDelayed(new Runnable() {
@@ -50,16 +50,16 @@ public class SplashScreenActivity extends AppCompatActivity {
                 img4.setVisibility(View.INVISIBLE);
                 img2.setVisibility(View.VISIBLE);
             }
-        },36);
+        },500);
 
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(SplashScreenActivity.this,MainActivity.class);
+                Intent intent = new Intent(SplashScreenActivity.this,LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
-        },50);
+        },1000);
     }
 }

@@ -131,6 +131,7 @@
         android:id="@+id/login_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:checked="false"
         android:fontFamily="@font/my_font_chalet"
         android:shadowColor="#009E1010"
         android:text="@string/Save_login"
@@ -138,11 +139,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_error_text" />
 
-    <TextView
-        android:id="@+id/login_text_tmp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="43dp"
-        tools:layout_editor_absoluteY="52dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

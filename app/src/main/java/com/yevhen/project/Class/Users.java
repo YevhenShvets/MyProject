@@ -28,7 +28,6 @@ public class Users {
     @SerializedName("refreshToken")
     @Expose
     private String refreshToken;
-
     public String getId() {
         return id;
     }

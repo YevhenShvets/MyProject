@@ -36,6 +36,7 @@ public class Main2Activity extends AppCompatActivity {
     Class fragmentClass;
     public static Fragment fragment;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,6 +136,7 @@ public class Main2Activity extends AppCompatActivity {
                 });
             }
         });
+
 
 
        /* Toolbar toolbar = findViewById(R.id.toolbar);

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,6 +75,8 @@ public class RegistrationFragment extends Fragment {
         username = (EditText) view.findViewById(R.id.registration_username_edit);
         vercode = (EditText) view.findViewById(R.id.registration_varcode_edit);
         password = (EditText) view.findViewById(R.id.registration_pass_edit);
+
+        vercode.setFilters(new InputFilter[] {new InputFilter.AllCaps()});
 
         Function.setEnabled_button(button_registration,false);
 
