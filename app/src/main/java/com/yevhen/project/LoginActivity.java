@@ -48,11 +48,14 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(is_login_save()){
+
+        //Збережена авторизація
+        File file = new File(context);
+        if(file.is_login_save()){
             boolean b=false;
             email_text="";
             pass_text="";
-            String email_pass = getLOGIN();
+            String email_pass = file.getLOGIN();
             //Розірвання логіну від пароля
             for(int i=0;i<email_pass.length();i++){
                 if(email_pass.charAt(i)==';') {
@@ -68,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
             }
             POST_LOGIN(email_text,pass_text);
         }else {
+
             setContentView(R.layout.activity_login);
 
             registr_text = (TextView) findViewById(R.id.login_registration);
@@ -128,7 +132,8 @@ public class LoginActivity extends AppCompatActivity {
                         }, 2000);
                         //зберігаємо дані користувача, якщо ми обрали галочку
                         if (save_check.isChecked()) {
-                            saveLogin(email.getText().toString(),pass.getText().toString());
+                            File file = new File(context);
+                            file.saveLogin(email.getText().toString(),pass.getText().toString());
                         }
                         //авторизовуємося
                         email_text = email.getText().toString();
@@ -229,34 +234,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         }else return;
-    }
-
-    private boolean is_login_save(){
-        SharedPreferences myPreferences = getSharedPreferences(LOGIN_NAME_FILE,MODE_PRIVATE);
-        return myPreferences.getBoolean(IS_LOGIN,false);
-    }
-
-
-    private void saveLogin(String email,String pass){
-        SharedPreferences myPreferences = getSharedPreferences(LOGIN_NAME_FILE,MODE_PRIVATE);
-        SharedPreferences.Editor editor = myPreferences.edit();
-
-        editor.putBoolean(IS_LOGIN,true);
-        editor.putString(LOGIN_EMAIL,email);
-        editor.putString(LOGIN_PASS,pass);
-        editor.apply();
-    }
-
-    private String getLOGIN(){
-        SharedPreferences myPreferences = getSharedPreferences(LOGIN_NAME_FILE,MODE_PRIVATE);
-        if(is_login_save()){
-            String e,p;
-            e= myPreferences.getString(LOGIN_EMAIL,"");
-            p = myPreferences.getString(LOGIN_PASS,"");
-          return e+";"+p;
-        }else{
-           return "EROOR";
-        }
     }
 
 
