@@ -59,7 +59,7 @@ public class Main2Activity extends AppCompatActivity {
         //then add them to navigation drawer
 
         sNavigationDrawer.setMenuItemList(menuItems);
-        fragmentClass =  Settings_fragment.class;
+        fragmentClass =  MainFragment.class;
         try {
             fragment = (Fragment) fragmentClass.newInstance();
         } catch (Exception e) {
@@ -81,7 +81,7 @@ public class Main2Activity extends AppCompatActivity {
 
                 switch (position){
                     case 0:{
-                        fragmentClass = Settings_fragment.class;
+                        fragmentClass = MainFragment.class;
                         break;
                     }
                     case 1:{

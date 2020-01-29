@@ -60,6 +60,22 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"></Button>
 
+    <TextView
+        android:id="@+id/connect_error_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/listempty"
+        android:visibility="invisible"
+        android:textAlignment="center"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/my_font_chalet"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/connect_wifi_list"
+        app:layout_constraintEnd_toEndOf="@+id/connect_wifi_list"
+        app:layout_constraintStart_toStartOf="@+id/connect_wifi_list"
+        app:layout_constraintTop_toBottomOf="@+id/connect_wifi_text_1" />
+
     <ListView
         android:id="@+id/connect_wifi_list"
         android:layout_width="match_parent"
@@ -70,8 +86,12 @@
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/connect_wifi_upg"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/connect_wifi_text_1"></ListView>
+        app:layout_constraintTop_toBottomOf="@+id/connect_wifi_text_1"
+        app:layout_constraintVertical_bias="0.0">
+
+    </ListView>
 
     <Button
         android:id="@+id/connect_wifi_open_settings_button"

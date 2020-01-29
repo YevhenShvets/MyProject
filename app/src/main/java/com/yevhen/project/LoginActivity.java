@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private static String LOGIN_PASS = "LOGIN_PASS";
     private static String IS_LOGIN = "LOGIN_SAVE";
     private String email_text, pass_text;
+    private boolean isLogin;
 
 
     private Context context = this;
@@ -48,7 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        isLogin = false;
         //Збережена авторизація
         File file = new File(context);
         if(file.is_login_save()){
@@ -70,7 +71,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
             POST_LOGIN(email_text,pass_text);
-        }else {
+        }
+        if(!isLogin){
 
             setContentView(R.layout.activity_login);
 
@@ -173,6 +175,7 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(context, "Щось пішло не так на стороні сервера (500)", Toast.LENGTH_SHORT).show();
                             break;
                     }
+                    isLogin = false;
                 } else {
                     if (response.code() == 200) {
                         Toast.makeText(context, "Авторизовано", Toast.LENGTH_SHORT).show();
@@ -184,6 +187,7 @@ public class LoginActivity extends AppCompatActivity {
                                     response.body().getHubId(),
                                     response.body().getAccessToken(),
                                     response.body().getRefreshToken());
+                            isLogin = true;
                             Intent intent = new Intent(LoginActivity.this,Main2Activity.class);
                             startActivity(intent);
                             finish();
@@ -194,6 +198,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Users> call, Throwable t) {
                 Toast.makeText(context, "Помилка\nПеревірте підключення до інтернету", Toast.LENGTH_SHORT).show();
+                isLogin = false;
             }
         });
 

@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -56,6 +57,7 @@ public class Connect_hub_fragment extends Fragment {
     ListView wifi_list;
     Button upg;
     Button open_settings;
+    TextView text_error_list;
 
     static int REQUEST_WIFI_STATE = 1;
 
@@ -73,7 +75,7 @@ public class Connect_hub_fragment extends Fragment {
 
         upg = (Button)view.findViewById(R.id.connect_wifi_upg);
         open_settings = (Button) view.findViewById(R.id.connect_wifi_open_settings_button);
-
+        text_error_list = (TextView) view.findViewById(R.id.connect_error_text);
         ConnectWifi();
 
         open_settings.setOnClickListener(new View.OnClickListener() {
@@ -86,14 +88,12 @@ public class Connect_hub_fragment extends Fragment {
         upg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                wifi_list.setVisibility(View.INVISIBLE);
                 final LoadingDialog ld = new LoadingDialog(getActivity());
                 ld.show();
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        wifi_list.setVisibility(View.VISIBLE);
                         ld.dismiss();
                         ConnectWifi();
                     }},3000);
@@ -122,41 +122,47 @@ public class Connect_hub_fragment extends Fragment {
         Wifi wifi = new Wifi(1,"");
         listWifi = new ArrayList<>();
         List<ScanResult> a = wifiManager.getScanResults();
-        int img = 1;
-        for (ScanResult scanResult : a) {
-            if(scanResult.level>=-50) img = R.drawable.wifi_icons_1;
-            else if(scanResult.level>=-60) img = R.drawable.wifi_icons_2;
-            else if(scanResult.level>=-70) img = R.drawable.wifi_icons_3;
-            else if(scanResult.level< -70) img= R.drawable.wifi_icons_4;
-            wifi = new Wifi(img,scanResult.SSID);
-            listWifi.add(wifi);
-        }
-
-        MyAdapter adapter = new MyAdapter(getContext(),R.layout.list_item,listWifi);
         wifi_list = (ListView) view.findViewById(R.id.connect_wifi_list);
-        wifi_list.setAdapter(adapter);
+        if(a.size()==0){
+            text_error_list.setVisibility(View.VISIBLE);
+            MyAdapter adapter = new MyAdapter(getContext(), R.layout.list_item, listWifi);
+            wifi_list.setAdapter(adapter);
+        }else {
+            text_error_list.setVisibility(View.INVISIBLE);
+            int img = 1;
+            for (ScanResult scanResult : a) {
+                if (scanResult.level >= -50) img = R.drawable.wifi_icons_1;
+                else if (scanResult.level >= -60) img = R.drawable.wifi_icons_2;
+                else if (scanResult.level >= -70) img = R.drawable.wifi_icons_3;
+                else if (scanResult.level < -70) img = R.drawable.wifi_icons_4;
+                wifi = new Wifi(img, scanResult.SSID);
+                listWifi.add(wifi);
+            }
 
+            MyAdapter adapter = new MyAdapter(getContext(), R.layout.list_item, listWifi);
+            wifi_list.setAdapter(adapter);
 
-
-        wifi_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                List<ScanResult> wifiManagerScanResults = wifiManager.getScanResults();
-                ScanResult scan = wifiManagerScanResults.get(position);
-                String s1 ="",s;
-                s = wifiManager.getConnectionInfo().getSSID().toString();
-                for(int i = 1;i<s.length()-1;i++){
-                    s1= s1+ s.charAt(i);
+            wifi_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    List<ScanResult> wifiManagerScanResults = wifiManager.getScanResults();
+                    ScanResult scan = wifiManagerScanResults.get(position);
+                    String s1 = "", s;
+                    s = wifiManager.getConnectionInfo().getSSID().toString();
+                    for (int i = 1; i < s.length() - 1; i++) {
+                        s1 = s1 + s.charAt(i);
+                    }
+                    if (s1.equals(scan.SSID.toString())) {
+                        Toast.makeText(getContext(), "Ви вибрали підключений WIFI", Toast.LENGTH_LONG).show();
+                    } else {
+                        //Створюємо діалогове вікно для підключення до HUB
+                        Dialog_connect_hub cdd = new Dialog_connect_hub(getContext(), scan.SSID.toString(), scan.capabilities);
+                        cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                        cdd.show();
+                    }
                 }
-                if(s1.equals(scan.SSID.toString())){
-                    Toast.makeText(getContext(),"Ви вибрали підключений WIFI",Toast.LENGTH_LONG).show();
-                }else {
-                    //Створюємо діалогове вікно для підключення до HUB
-                    Dialog_connect_hub cdd = new Dialog_connect_hub(getContext(),scan.SSID.toString(),scan.capabilities);
-                    cdd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                    cdd.show();
-                }
-            } });
+            });
+        }
     }
 
 
