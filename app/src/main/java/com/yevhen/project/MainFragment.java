@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,8 +35,8 @@ public class MainFragment extends Fragment {
     Button b1;
     ImageView logo;
 
-    EditText e1, e2;
     TextView tmp;
+    Spinner spinner;
     float aa =100f;
     float mPrevX,mPrevY;
     boolean create_mode = false;
@@ -53,10 +54,10 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.build_layout, container, false);
 
         Button button  = (Button) view.findViewById(R.id.b1);
-        e1 = (EditText) view.findViewById(R.id.E1);
-        e2 = (EditText) view.findViewById(R.id.E2);
         tmp = (TextView) view.findViewById(R.id.tmp_text);
-        Switch switch1 = (Switch) view.findViewById(R.id.tmp_switch);
+        spinner = (Spinner) view.findViewById(R.id.tmp_spinner);
+
+        final Switch switch1 = (Switch) view.findViewById(R.id.tmp_switch);
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -73,7 +74,11 @@ public class MainFragment extends Fragment {
                 //ImageButton a= new ImageButton(getContext());
                 ImageView a = new ImageView(getContext());
                 FrameLayout.LayoutParams img_l = new FrameLayout.LayoutParams(30,30);
-                a.setImageResource(R.drawable.icon_lamp);
+
+                switch(spinner.getSelectedItemPosition()){
+                    case 0:a.setImageResource(R.drawable.icon_lamp); break;
+                    case 1:a.setImageResource(R.drawable.icon_plant); break;
+                }
                 a.setLayoutParams(img_l);
                 a.setClickable(true);
                 a.setOnClickListener(new ImageClickLIstener(getContext(),i++,tmp));

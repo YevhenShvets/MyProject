@@ -16,6 +16,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Spinner
+        android:id="@+id/tmp_spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/orange"
+        android:entries="@array/build_item_list"
+        app:layout_constraintEnd_toStartOf="@id/b1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tmp_text"
         android:layout_width="wrap_content"
@@ -36,25 +47,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/b1"
         app:layout_constraintTop_toBottomOf="@+id/b1" />
-
-    <EditText
-        android:id="@+id/E1"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></EditText>
-
-    <EditText
-        android:id="@+id/E2"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:singleLine="true"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/E1"
-        app:layout_constraintTop_toTopOf="parent"></EditText>
 
     <FrameLayout
         android:id="@+id/layout_tmp"

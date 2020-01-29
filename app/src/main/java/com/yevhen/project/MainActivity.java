@@ -75,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.build_layout);
 
         Button button  = (Button) findViewById(R.id.b1);
-        final EditText e1 = (EditText) findViewById(R.id.E1);
-        final EditText e2 = (EditText) findViewById(R.id.E2);
         final TextView tmp = (TextView) findViewById(R.id.tmp_text);
         Switch switch1 = (Switch) findViewById(R.id.tmp_switch);
 
