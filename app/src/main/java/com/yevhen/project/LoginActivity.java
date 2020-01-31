@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
 import com.yevhen.project.Class.Users;
 import com.yevhen.project.Class.Users_log;
 
@@ -187,6 +188,11 @@ public class LoginActivity extends AppCompatActivity {
                                     response.body().getHubId(),
                                     response.body().getAccessToken(),
                                     response.body().getRefreshToken());
+
+                            putToken(user.getId(),user.getAccessToken());
+
+                            //getToken(user.getId(),user.getAccessToken());
+
                             isLogin = true;
                             Intent intent = new Intent(LoginActivity.this,Main2Activity.class);
                             startActivity(intent);
@@ -241,5 +247,52 @@ public class LoginActivity extends AppCompatActivity {
         }else return;
     }
 
+    private void getToken(String id,String access_token){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://34.76.99.94:5050")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonApi jsonApi = retrofit.create(JsonApi.class);
+
+        Call<JsonObject> call = jsonApi.getToken(id,access_token);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                if(response.body()!=null){
+                    Toast.makeText(context,response.body().toString() ,Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(context,t.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void putToken(String id,String access_token){
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://34.76.99.94:5050")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        JsonApi jsonApi = retrofit.create(JsonApi.class);
+        JsonObject token = new JsonObject();
+        token.addProperty("fcmToken","test3");
+        Call<Void> call = jsonApi.putToken(id,access_token,token);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                Toast.makeText(context,"RESPONSE token "+response.code(),Toast.LENGTH_LONG).show();
+
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(context,"FAIL token",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 
 }

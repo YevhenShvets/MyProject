@@ -19,9 +19,16 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.yevhen.project.Class.Users;
 import com.yevhen.project.LoginActivity;
 
 import androidx.fragment.app.Fragment;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.view.Gravity.*;
 

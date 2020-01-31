@@ -17,6 +17,7 @@
     <string name="menu_main_page">Головна сторінка</string>
     <string name="menu_connect_hub">Підключити хаб</string>
     <string name="menu_setting">Налаштування</string>
+    <string name="msg_token">dfsgfsdfsdfsdgdsfsd</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
