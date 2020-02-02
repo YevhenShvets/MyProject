@@ -53,7 +53,6 @@ public class Main2Activity extends AppCompatActivity {
 
         //Use the MenuItem given by this library and not the default one.
         //First parameter is the title of the menu item and then the second parameter is the image which will be the background of the menu item.
-
         menuItems.add(new MenuItem("Головна сторінка",R.drawable.menu_icon_main));
         menuItems.add(new MenuItem("Підключити хаб",R.drawable.menu_icon_hub));
         menuItems.add(new MenuItem("Налаштування",R.drawable.menu_icon_settings));

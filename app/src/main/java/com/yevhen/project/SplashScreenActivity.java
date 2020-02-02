@@ -25,7 +25,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        FirebaseInstanceId.getInstance().getInstanceId()
+        /*FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -42,7 +42,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                         Log.d("FIREBASE", msg);
                     }
 
-                });
+                });*/
 
         final ImageView img1 = (ImageView) findViewById(R.id.splash_logo1);
         final ImageView img2 = (ImageView) findViewById(R.id.splash_logo2);

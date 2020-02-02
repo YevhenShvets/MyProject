@@ -50,6 +50,6 @@ public interface JsonApi {
 
     @Headers("Content-Type: application/json")
     @PUT("users/{id}/fcmToken")
-    Call<Token> putToken(@Path("id") String id, @Query("access_token") String access_token,@Body Token token);
+    Call<Void> putToken(@Path("id") String id, @Query("access_token") String access_token,@Body JsonObject token);
 
 }

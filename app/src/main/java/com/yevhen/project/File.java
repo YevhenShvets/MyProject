@@ -52,8 +52,9 @@ public final class File extends Application {
         editor.clear();
         editor.commit();
     }
-    public void login_is_right(){
-        
+
+    public static void putToken(){
+
     }
 
 }
