@@ -16,9 +16,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.yevhen.project.Class.Token;
 import com.yevhen.project.Class.Users;
 import com.yevhen.project.Class.Users_log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -278,19 +284,23 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         JsonApi jsonApi = retrofit.create(JsonApi.class);
-        JsonObject token = new JsonObject();
-        token.addProperty("fcmToken","test3");
-        Call<Void> call = jsonApi.putToken(id,access_token,token);
-        call.enqueue(new Callback<Void>() {
+        JSONObject token = new JSONObject();
+        try {
+            token.accumulate("fcm_token","test3");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Call<Token> call = jsonApi.putToken(id,access_token,new Token("test4"));
+        call.enqueue(new Callback<Token>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-                Toast.makeText(context,"RESPONSE token "+response.code(),Toast.LENGTH_LONG).show();
+            public void onResponse(Call<Token> call, Response<Token> response) {
+                Toast.makeText(context,"RESPONSE token "+response.code() +response.isSuccessful(),Toast.LENGTH_LONG).show();
 
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(context,"FAIL token",Toast.LENGTH_LONG).show();
+            public void onFailure(Call<Token> call, Throwable t) {
+                Toast.makeText(context,"FAIL token"+t.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -1,15 +1,20 @@
 package com.yevhen.project;
 
 import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.yevhen.project.Class.Email_reg;
+import com.yevhen.project.Class.Token;
 import com.yevhen.project.Class.Users;
 import com.yevhen.project.Class.Users_log;
 import com.yevhen.project.Class.Users_reg;
 
+import org.json.JSONObject;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -43,8 +48,8 @@ public interface JsonApi {
     @GET("users/{id}/fcmToken")
     Call<JsonObject> getToken(@Path("id") String id, @Query("access_token") String access_token);
 
-
+    @Headers("Content-Type: application/json")
     @PUT("users/{id}/fcmToken")
-    Call<Void> putToken(@Path("id") String id, @Query("access_token") String access_token, @Query("fcmToken") JsonObject token);
+    Call<Token> putToken(@Path("id") String id, @Query("access_token") String access_token,@Body Token token);
 
 }
