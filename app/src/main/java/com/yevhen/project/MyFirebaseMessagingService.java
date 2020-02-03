@@ -24,52 +24,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(@NonNull String s) {
-        putToken(LoginActivity.user.getId(),LoginActivity.user.getAccessToken(),s);
+        //MyResponse myResponse = new MyResponse(getApplicationContext(),"");
+       // myResponse.putToken(SplashScreenActivity.user.getId(),SplashScreenActivity.user.getAccessToken(),s);
     }
 
-    public static void getToken(String id, String access_token){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://34.76.99.94:5050")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        JsonApi jsonApi = retrofit.create(JsonApi.class);
-
-        Call<JsonObject> call = jsonApi.getToken(id,access_token);
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                if(response.body()!=null){
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-            }
-        });
-    }
-
-    private void putToken(String id,String access_token,String token){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://34.76.99.94:5050")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        JsonApi jsonApi = retrofit.create(JsonApi.class);
-        JsonObject token_ = new JsonObject();
-        token_.addProperty("fcm_token",token);
-        Call<Void> call = jsonApi.putToken(id,access_token,token_);
-        call.enqueue(new Callback<Void>() {
-            @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
-
-            }
-
-            @Override
-            public void onFailure(Call<Void> call, Throwable t) {
-
-            }
-        });
-    }
 
 }

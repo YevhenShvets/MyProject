@@ -8,43 +8,13 @@
     tools:context=".SplashScreenActivity">
 
     <ImageView
-        android:id="@+id/splash_logo1"
+        android:id="@+id/splash_logo"
         android:layout_width="230dp"
         android:layout_height="230dp"
-        android:src="@drawable/logo_1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></ImageView>
 
-    <ImageView
-        android:id="@+id/splash_logo2"
-        android:layout_width="230dp"
-        android:layout_height="230dp"
-        android:src="@drawable/logo_2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></ImageView>
-
-    <ImageView
-        android:id="@+id/splash_logo3"
-        android:layout_width="230dp"
-        android:layout_height="230dp"
-        android:src="@drawable/logo_3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></ImageView>
-
-    <ImageView
-        android:id="@+id/splash_logo4"
-        android:layout_width="230dp"
-        android:layout_height="230dp"
-        android:src="@drawable/logo_4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></ImageView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,13 @@
 package com.yevhen.project;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ActionMode;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -17,15 +21,108 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.yevhen.project.Class.Users;
+import com.yevhen.project.Class.Users_log;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SplashScreenActivity extends AppCompatActivity {
+    private Context context = this;
+
+    private MyResponse myResponse;
+    private File file;
+    public Users user;
+
+    public ImageView logo;
+    private AnimationDrawable animationDrawable;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        logo = (ImageView) findViewById(R.id.splash_logo);
+        animation();
 
-        /*FirebaseInstanceId.getInstance().getInstanceId()
+        String email_text, pass_text, email_pass;
+
+        //Збережена авторизація
+        file = new File(context);
+        if(file.is_login_save()) {
+
+            //Розірвання логіну від пароля
+            boolean b = false;
+            email_text = "";
+            pass_text = "";
+            email_pass = file.getLOGIN();
+            for (int i = 0; i < email_pass.length(); i++) {
+                if (email_pass.charAt(i) == ';') {
+                    b = true;
+                    i++;
+                }
+                if (b == false) {
+                    email_text += email_pass.charAt(i);
+                } else {
+                    pass_text += email_pass.charAt(i);
+                }
+            }
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("http://34.76.99.94:5050")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            JsonApi jsonApi = retrofit.create(JsonApi.class);
+
+            Call<Users> call = jsonApi.getAuthUsers(new Users_log(email_text, pass_text));
+            call.enqueue(new Callback<Users>() {
+                @Override
+                public void onResponse(Call<Users> call, Response<Users> response) {
+                    if (!response.isSuccessful()) {
+                        int code = response.code();
+                        switch (code) {
+                            case 400:
+                                Toast.makeText(context, "Деякі парами відсутні або були вказані неправильно (400)", Toast.LENGTH_SHORT).show();
+                                break;
+                            case 401:
+                                Toast.makeText(context, "Неправильний пароль", Toast.LENGTH_SHORT).show();
+                                break;
+                            case 404:
+                                Toast.makeText(context, "Помилка 404", Toast.LENGTH_SHORT).show();
+                                break;
+                            case 500:
+                                Toast.makeText(context, "Щось пішло не так на стороні сервера (500)", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    } else {
+                        if (response.code() == 200) {
+                            Toast.makeText(context, "Авторизовано", Toast.LENGTH_SHORT).show();
+                            if (response.body() != null) {
+                                user = response.body();
+                                Intent intent = new Intent(SplashScreenActivity.this,Main2Activity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
+                    }
+                }
+                @Override
+                public void onFailure(Call<Users> call, Throwable t) {
+                    Toast.makeText(context, "Помилка\nПеревірте підключення до інтернету", Toast.LENGTH_SHORT).show();
+                }
+
+            });
+
+        }
+        else{
+            Intent intent = new Intent(SplashScreenActivity.this,LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -40,53 +137,20 @@ public class SplashScreenActivity extends AppCompatActivity {
                         // Log and toast
                         String msg = token;
                         Log.d("FIREBASE", msg);
+                        //MyFirebaseMessagingService.putToken(user.getId(),user.getAccessToken(),msg);
                     }
 
-                });*/
+                });
+    }
 
-        final ImageView img1 = (ImageView) findViewById(R.id.splash_logo1);
-        final ImageView img2 = (ImageView) findViewById(R.id.splash_logo2);
-        final ImageView img3 = (ImageView) findViewById(R.id.splash_logo3);
-        final ImageView img4 = (ImageView) findViewById(R.id.splash_logo4);
-        img2.setVisibility(View.INVISIBLE);
-        img3.setVisibility(View.INVISIBLE);
-        img4.setVisibility(View.INVISIBLE);
+    private void animation() {
+        logo.setBackgroundResource(R.drawable.splash_screen_animation);
+        animationDrawable = (AnimationDrawable) logo.getBackground();
+    }
 
-        Handler handler1 = new Handler();
-        handler1.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                img1.setVisibility(View.INVISIBLE);
-                img3.setVisibility(View.VISIBLE);
-            }
-        },200);
-
-        Handler handler2 = new Handler();
-        handler2.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                img3.setVisibility(View.INVISIBLE);
-                img4.setVisibility(View.VISIBLE);
-            }
-        },350);
-
-        Handler handler3 = new Handler();
-        handler1.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                img4.setVisibility(View.INVISIBLE);
-                img2.setVisibility(View.VISIBLE);
-            }
-        },500);
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashScreenActivity.this,LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        },1000);
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        animationDrawable.start();
     }
 }

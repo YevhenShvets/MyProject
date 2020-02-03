@@ -52,9 +52,4 @@ public final class File extends Application {
         editor.clear();
         editor.commit();
     }
-
-    public static void putToken(){
-
-    }
-
 }
