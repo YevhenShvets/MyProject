@@ -37,14 +37,11 @@ public class Main2Activity extends AppCompatActivity {
     Class fragmentClass;
     public static Fragment fragment;
 
-    String id;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
 
-        Toast.makeText(this,id,Toast.LENGTH_LONG).show();
         sNavigationDrawer = findViewById(R.id._navigationDrawer);
 
         //Creating a list of menu Items

@@ -33,16 +33,18 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
-
     private Context context = this;
+
     private TextView registr_text;
     private TextView error_text;
     private Button login_button;
     private EditText email;
     private EditText pass;
     private CheckBox save_check;
+
     private Retrofit retrofit;
     private JsonApi jsonApi;
+
     private String email_text,pass_text;
 
     @Override
@@ -123,14 +125,61 @@ public class LoginActivity extends AppCompatActivity {
                     //авторизовуємося
                     email_text = email.getText().toString();
                     pass_text = pass.getText().toString();
-                    Intent intent = new Intent(LoginActivity.this,Main2Activity.class);
-                    MyResponse myresponse = new MyResponse(context,"fd",intent);
-                    myresponse.POST_LOGIN(email_text,pass_text);
+                    retrofit = new Retrofit.Builder()
+                            .baseUrl("http://34.76.99.94:5050")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    jsonApi = retrofit.create(JsonApi.class);
+
+                    Call<Users> call = jsonApi.getAuthUsers(new Users_log(email_text, pass_text));
+                    call.enqueue(new Callback<Users>() {
+                        @Override
+                        public void onResponse(Call<Users> call, Response<Users> response) {
+                            if (!response.isSuccessful()) {
+                                int code = response.code();
+                                switch (code) {
+                                    case 400:
+                                        Toast.makeText(context, "Деякі парами відсутні або були вказані неправильно (400)", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 401:
+                                        Toast.makeText(context, "Неправильний пароль", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 404:
+                                        Toast.makeText(context, "Помилка 404", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case 500:
+                                        Toast.makeText(context, "Щось пішло не так на стороні сервера (500)", Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            } else {
+                                if (response.code() == 200) {
+                                    Toast.makeText(context, "Авторизовано", Toast.LENGTH_SHORT).show();
+                                    if (response.body() != null) {
+                                        MyResponse.user = response.body();
+                                        start_main_activity();
+                                    }
+                                }
+                            }
+                        }
+                        @Override
+                        public void onFailure(Call<Users> call, Throwable t) {
+                            Toast.makeText(context, "Помилка\nПеревірте підключення до інтернету", Toast.LENGTH_SHORT).show();
+                        }
+
+                    });
                 }
             }
         });
 
     }
+
+    private void start_main_activity(){
+        Intent intent = new Intent(LoginActivity.this,Main2Activity.class);
+        startActivity(intent);
+        finish();
+    }
+
 
     //робить аткивність кнопок перевіряючи едіти
     private void change(EditText e1, EditText e2,TextView error,int i) {

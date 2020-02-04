@@ -24,8 +24,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onNewToken(@NonNull String s) {
-        //MyResponse myResponse = new MyResponse(getApplicationContext(),"");
-       // myResponse.putToken(SplashScreenActivity.user.getId(),SplashScreenActivity.user.getAccessToken(),s);
+        MyResponse myResponse = new MyResponse(getApplicationContext(),"");
+        myResponse.putToken(MyResponse.user.getId(),MyResponse.user.getAccessToken(),s);
     }
 
 

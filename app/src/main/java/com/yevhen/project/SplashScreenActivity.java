@@ -35,7 +35,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private MyResponse myResponse;
     private File file;
-    public Users user;
 
     public ImageView logo;
     private AnimationDrawable animationDrawable;
@@ -50,7 +49,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         String email_text, pass_text, email_pass;
 
-        //Збережена авторизація
+        //Збережена авторизація, автопідключення
         file = new File(context);
         if(file.is_login_save()) {
 
@@ -101,10 +100,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                         if (response.code() == 200) {
                             Toast.makeText(context, "Авторизовано", Toast.LENGTH_SHORT).show();
                             if (response.body() != null) {
-                                user = response.body();
-                                Intent intent = new Intent(SplashScreenActivity.this,Main2Activity.class);
-                                startActivity(intent);
-                                finish();
+                                MyResponse.user = response.body();
+                                start_main_activity();
                             }
                         }
                     }
@@ -146,6 +143,12 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void animation() {
         logo.setBackgroundResource(R.drawable.splash_screen_animation);
         animationDrawable = (AnimationDrawable) logo.getBackground();
+    }
+
+    private void start_main_activity(){
+        Intent intent = new Intent(SplashScreenActivity.this,Main2Activity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
