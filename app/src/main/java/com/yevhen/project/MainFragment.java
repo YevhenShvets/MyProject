@@ -19,11 +19,23 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.yevhen.project.Class.MyObject;
 import com.yevhen.project.Class.Users;
 import com.yevhen.project.LoginActivity;
 
 import androidx.fragment.app.Fragment;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import io.realm.Realm;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+import io.realm.internal.RealmObjectProxy;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,6 +56,13 @@ public class MainFragment extends Fragment {
 
     TextView tmp;
     Spinner spinner;
+    Button button_set;
+    Button button_get;
+    FrameLayout frameLayout;
+    FrameLayout.LayoutParams layoutParams;
+    Realm realm;
+    ImageView a;
+
     float aa =100f;
     float mPrevX,mPrevY;
     boolean create_mode = false;
@@ -63,6 +82,9 @@ public class MainFragment extends Fragment {
         Button button  = (Button) view.findViewById(R.id.b1);
         tmp = (TextView) view.findViewById(R.id.tmp_text);
         spinner = (Spinner) view.findViewById(R.id.tmp_spinner);
+        button_set = (Button) view.findViewById(R.id.tmp_button_set);
+        button_get = (Button) view.findViewById(R.id.tmp_button_get);
+        realm = Realm.getDefaultInstance();
 
         final Switch switch1 = (Switch) view.findViewById(R.id.tmp_switch);
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -72,14 +94,28 @@ public class MainFragment extends Fragment {
             }
         });
 
-        final FrameLayout frameLayout = (FrameLayout) view.findViewById(R.id.layout_tmp);
+        frameLayout = (FrameLayout) view.findViewById(R.id.layout_tmp);
+
+        button_set.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                save_data();
+            }
+        });
+
+        button_get.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                get_object();
+            }
+        });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 //ImageButton a= new ImageButton(getContext());
-                ImageView a = new ImageView(getContext());
+                a = new ImageView(getContext());
                 FrameLayout.LayoutParams img_l = new FrameLayout.LayoutParams(30,30);
 
                 switch(spinner.getSelectedItemPosition()){
@@ -112,8 +148,6 @@ public class MainFragment extends Fragment {
                                     break;
                                 case MotionEvent.ACTION_UP:
                                     //tmp.setText("ACTION_UP"+ event.getX() + " X "+ event.getY()+"\n"+v.getX() +" X "+ v.getY());
-                                    // v.setY(event.getRawY());
-                                    // v.setX(event.getRawX());
                                     break;
                             }
                         }
@@ -127,5 +161,78 @@ public class MainFragment extends Fragment {
         });
         return view;
     }
+    private void save_data(){
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm bgRealm) {
+/*                Number id_ = bgRealm.where(MyObject.class).max("id");
+                int id= (id_==null)? 1:id_.intValue()+1;*/
+                MyObject myObject = bgRealm.createObject(MyObject.class);
+                myObject.setName("");
+                myObject.setCord_x(a.getX());
+                myObject.setCord_y(a.getY());
+                myObject.setImage_id(1);
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(getContext(),"+",Toast.LENGTH_SHORT).show();
+            }
+        }, new Realm.Transaction.OnError() {
+            @Override
+            public void onError(Throwable error) {
+                Toast.makeText(getContext(),"-",Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
+    RealmResults<MyObject> myObjects;
+
+    private void get_object(){
+        myObjects = realm.where(MyObject.class).findAll();
+
+        FrameLayout.LayoutParams idsa = new FrameLayout.LayoutParams(30,30);
+        ImageView img;
+        for(MyObject myObject: myObjects){
+            img = new ImageView(getContext());
+            img.setImageResource(R.drawable.icon_lamp);
+            img.setLayoutParams(idsa);
+            img.setClickable(true);
+            img.setOnClickListener(new ImageClickLIstener(getContext(),1,tmp));
+            img.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (create_mode) {
+                        float currX, currY;
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                mPrevX = event.getX();
+                                mPrevY = event.getY();
+                                break;
+                            case MotionEvent.ACTION_MOVE:
+                                currX = event.getRawX();
+                                currY = event.getRawY();
+
+                                v.setX(currX - mPrevX);
+                                v.setY(currY - mPrevY);
+
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                break;
+                        }
+                    }
+                    return false;
+                }});
+
+            img.setX(myObject.getCord_x());
+            img.setY(myObject.getCord_y());
+            frameLayout.addView(img,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        realm.close();
+    }
 }
