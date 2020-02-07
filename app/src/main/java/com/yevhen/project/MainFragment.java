@@ -63,10 +63,11 @@ public class MainFragment extends Fragment {
     Realm realm;
     ImageView a;
 
-    float aa =100f;
+
     float mPrevX,mPrevY;
     boolean create_mode = false;
     int i=0;
+    int data_i = 0;
 
     public MainFragment() {
         // Required empty public constructor
@@ -119,8 +120,14 @@ public class MainFragment extends Fragment {
                 FrameLayout.LayoutParams img_l = new FrameLayout.LayoutParams(30,30);
 
                 switch(spinner.getSelectedItemPosition()){
-                    case 0:a.setImageResource(R.drawable.icon_lamp); break;
-                    case 1:a.setImageResource(R.drawable.icon_plant); break;
+                    case 0:
+                        a.setImageResource(R.drawable.icon_lamp);
+                        a.setTag(R.drawable.icon_lamp);
+                        break;
+                    case 1:
+                        a.setImageResource(R.drawable.icon_plant);
+                        a.setTag(R.drawable.icon_plant);
+                        break;
                 }
                 a.setLayoutParams(img_l);
                 a.setClickable(true);
@@ -153,9 +160,8 @@ public class MainFragment extends Fragment {
                         }
                         return false;
                     }});
-                a.setX(aa);
+                a.setX(100);
                 a.setY(0f);
-                aa+=10f;
                 frameLayout.addView(a,layoutParams);
             }
         });
@@ -168,10 +174,16 @@ public class MainFragment extends Fragment {
 /*                Number id_ = bgRealm.where(MyObject.class).max("id");
                 int id= (id_==null)? 1:id_.intValue()+1;*/
                 MyObject myObject = bgRealm.createObject(MyObject.class);
-                myObject.setName("");
+                myObject.setName("" + data_i++);
                 myObject.setCord_x(a.getX());
                 myObject.setCord_y(a.getY());
-                myObject.setImage_id(1);
+                int img_id = 1;
+
+                switch ((int)a.getTag()){
+                    case R.drawable.icon_lamp: img_id = 1; break;
+                    case R.drawable.icon_plant: img_id = 2; break;
+                }
+                myObject.setImage_id(img_id);
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
@@ -190,15 +202,19 @@ public class MainFragment extends Fragment {
 
     private void get_object(){
         myObjects = realm.where(MyObject.class).findAll();
-
         FrameLayout.LayoutParams idsa = new FrameLayout.LayoutParams(30,30);
         ImageView img;
         for(MyObject myObject: myObjects){
             img = new ImageView(getContext());
-            img.setImageResource(R.drawable.icon_lamp);
+            switch (myObject.getImage_id()) {
+                case 1:
+                    img.setImageResource(R.drawable.icon_lamp); break;
+                case 2:
+                    img.setImageResource(R.drawable.icon_plant); break;
+            }
             img.setLayoutParams(idsa);
             img.setClickable(true);
-            img.setOnClickListener(new ImageClickLIstener(getContext(),1,tmp));
+            img.setOnClickListener(new ImageClickLIstener(getContext(),Function.toint(myObject.getName()),tmp));
             img.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
