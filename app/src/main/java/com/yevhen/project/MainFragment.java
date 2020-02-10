@@ -1,8 +1,15 @@
 package com.yevhen.project;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.LruCache;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -25,11 +32,15 @@ import com.yevhen.project.Class.MyObject;
 import com.yevhen.project.Class.Users;
 import com.yevhen.project.LoginActivity;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import org.json.JSONObject;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -42,6 +53,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.app.Activity.RESULT_OK;
 import static android.view.Gravity.*;
 
 
@@ -58,10 +70,15 @@ public class MainFragment extends Fragment {
     Spinner spinner;
     Button button_set;
     Button button_get;
+    Button button_photo;
     FrameLayout frameLayout;
     FrameLayout.LayoutParams layoutParams;
     Realm realm;
     ImageView a;
+    ImageView image;
+    View view;
+
+    private static final int GALLERY_REQUEST = 1;
 
 
     float mPrevX,mPrevY;
@@ -75,16 +92,16 @@ public class MainFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.build_layout, container, false);
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.build_layout, container, false);
 
         Button button  = (Button) view.findViewById(R.id.b1);
         tmp = (TextView) view.findViewById(R.id.tmp_text);
         spinner = (Spinner) view.findViewById(R.id.tmp_spinner);
         button_set = (Button) view.findViewById(R.id.tmp_button_set);
         button_get = (Button) view.findViewById(R.id.tmp_button_get);
+        button_photo = (Button) view.findViewById(R.id.tmp_button_photo);
+        image = (ImageView) view.findViewById(R.id.tmp_image);
         realm = Realm.getDefaultInstance();
 
         final Switch switch1 = (Switch) view.findViewById(R.id.tmp_switch);
@@ -97,28 +114,36 @@ public class MainFragment extends Fragment {
 
         frameLayout = (FrameLayout) view.findViewById(R.id.layout_tmp);
 
+        //пошук фото
+        button_photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                    photoPickerIntent.setType("image/*");
+                    startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
+            }
+        });
+
         button_set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                save_data();
+                image.setImageURI(new File(getContext()).get_room_uri());
+                //save_data();
             }
         });
 
         button_get.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                get_object();
+                //get_object();
             }
         });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                //ImageButton a= new ImageButton(getContext());
+                layoutParams = new FrameLayout.LayoutParams(60, 60);
                 a = new ImageView(getContext());
-                FrameLayout.LayoutParams img_l = new FrameLayout.LayoutParams(30,30);
-
                 switch(spinner.getSelectedItemPosition()){
                     case 0:
                         a.setImageResource(R.drawable.icon_lamp);
@@ -129,37 +154,36 @@ public class MainFragment extends Fragment {
                         a.setTag(R.drawable.icon_plant);
                         break;
                 }
-                a.setLayoutParams(img_l);
                 a.setClickable(true);
                 a.setOnClickListener(new ImageClickLIstener(getContext(),i++,tmp));
 
                 a.setOnTouchListener(new View.OnTouchListener() {
                     @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if (create_mode) {
-                            float currX, currY;
+                    public boolean onTouch(View view, MotionEvent event) {
+                        if(create_mode) {
                             switch (event.getAction()) {
+
                                 case MotionEvent.ACTION_DOWN:
-                                    //tmp.setText("ACTION_DOWN"+ event.getRawX() + " X "+ event.getRawY()+"\n"+v.getX() +" X "+ v.getY());
-                                    mPrevX = event.getX();
-                                    mPrevY = event.getY();
+                                    mPrevX = view.getX() - event.getRawX();
+                                    mPrevY = view.getY() - event.getRawY();
                                     break;
+
                                 case MotionEvent.ACTION_MOVE:
-                                    //tmp.setText("ACTION_MOVE"+ event.getX() + " X "+ event.getY()+"\n"+v.getX() +" X "+ v.getY());
-                                    currX = event.getRawX();
-                                    currY = event.getRawY();
-
-                                    v.setX(currX - mPrevX);
-                                    v.setY(currY - mPrevY);
-
+                                    view.animate()
+                                            .x(event.getRawX() + mPrevX)
+                                            .y(event.getRawY() + mPrevY)
+                                            .setDuration(0)
+                                            .start();
                                     break;
                                 case MotionEvent.ACTION_UP:
-                                    //tmp.setText("ACTION_UP"+ event.getX() + " X "+ event.getY()+"\n"+v.getX() +" X "+ v.getY());
                                     break;
+                                default:
+                                    return false;
                             }
                         }
-                        return false;
-                    }});
+                        return true;
+                    }
+                });
                 a.setX(100);
                 a.setY(0f);
                 frameLayout.addView(a,layoutParams);
@@ -167,6 +191,7 @@ public class MainFragment extends Fragment {
         });
         return view;
     }
+
     private void save_data(){
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
@@ -202,7 +227,7 @@ public class MainFragment extends Fragment {
 
     private void get_object(){
         myObjects = realm.where(MyObject.class).findAll();
-        FrameLayout.LayoutParams idsa = new FrameLayout.LayoutParams(30,30);
+        FrameLayout.LayoutParams idsa = new FrameLayout.LayoutParams(15,15);
         ImageView img;
         for(MyObject myObject: myObjects){
             img = new ImageView(getContext());
@@ -218,26 +243,28 @@ public class MainFragment extends Fragment {
             img.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    if (create_mode) {
-                        float currX, currY;
+                    if(create_mode) {
                         switch (event.getAction()) {
+
                             case MotionEvent.ACTION_DOWN:
-                                mPrevX = event.getX();
-                                mPrevY = event.getY();
+                                mPrevX = view.getX() - event.getRawX();
+                                mPrevY = view.getY() - event.getRawY();
                                 break;
+
                             case MotionEvent.ACTION_MOVE:
-                                currX = event.getRawX();
-                                currY = event.getRawY();
-
-                                v.setX(currX - mPrevX);
-                                v.setY(currY - mPrevY);
-
+                                view.animate()
+                                        .x(event.getRawX() + mPrevX)
+                                        .y(event.getRawY() + mPrevY)
+                                        .setDuration(0)
+                                        .start();
                                 break;
                             case MotionEvent.ACTION_UP:
                                 break;
+                            default:
+                                return false;
                         }
                     }
-                    return false;
+                    return true;
                 }});
 
             img.setX(myObject.getCord_x());
@@ -251,4 +278,26 @@ public class MainFragment extends Fragment {
         super.onDestroy();
         realm.close();
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode){
+            case GALLERY_REQUEST:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        final Uri imageUri = data.getData();
+                        final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                        image.setImageBitmap(selectedImage);
+                        File file = new File(getContext());
+                        file.set_room_uri(imageUri);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+        }
+    }
+
 }

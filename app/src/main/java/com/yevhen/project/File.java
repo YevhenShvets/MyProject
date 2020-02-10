@@ -3,6 +3,7 @@ package com.yevhen.project;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -16,6 +17,8 @@ public final class File extends Application {
     private static String LOGIN_EMAIL = "LOGIN_EMAIL";
     private static String LOGIN_PASS = "LOGIN_PASS";
     private static String IS_LOGIN = "LOGIN_SAVE";
+    private static String PLAN_ROOM = "PLAN_ROOM";
+    private static String ROOM_URI = "ROOM_URI";
     private SharedPreferences myPreferences;
 
     public boolean is_login_save(){
@@ -52,4 +55,16 @@ public final class File extends Application {
         editor.clear();
         editor.commit();
     }
+    public void set_room_uri(Uri uri){
+        String u = uri.toString();
+        myPreferences = context.getSharedPreferences(PLAN_ROOM,MODE_PRIVATE);
+        SharedPreferences.Editor editor = myPreferences.edit();
+        editor.putString(ROOM_URI,u);
+        editor.apply();
+    }
+    public Uri get_room_uri(){
+        myPreferences = context.getSharedPreferences(PLAN_ROOM,MODE_PRIVATE);
+        return  Uri.parse(myPreferences.getString(ROOM_URI,""));
+    }
+
 }
