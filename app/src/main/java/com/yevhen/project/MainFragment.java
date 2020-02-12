@@ -9,6 +9,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.LruCache;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,11 +22,13 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.yevhen.project.Class.MyObject;
@@ -34,14 +37,22 @@ import com.yevhen.project.LoginActivity;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Timer;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
@@ -56,10 +67,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static android.app.Activity.RESULT_OK;
 import static android.view.Gravity.*;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 
 public class MainFragment extends Fragment {
     TextView tv1;
@@ -77,6 +84,8 @@ public class MainFragment extends Fragment {
     ImageView a;
     ImageView image;
     View view;
+    Bitmap bitmap;
+
 
     private static final int GALLERY_REQUEST = 1;
 
@@ -102,6 +111,7 @@ public class MainFragment extends Fragment {
         button_get = (Button) view.findViewById(R.id.tmp_button_get);
         button_photo = (Button) view.findViewById(R.id.tmp_button_photo);
         image = (ImageView) view.findViewById(R.id.tmp_image);
+        layoutParams = new FrameLayout.LayoutParams(60, 60);
         realm = Realm.getDefaultInstance();
 
         final Switch switch1 = (Switch) view.findViewById(R.id.tmp_switch);
@@ -127,7 +137,7 @@ public class MainFragment extends Fragment {
         button_set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                image.setImageURI(new File(getContext()).get_room_uri());
+                image.setImageBitmap(new File(getContext()).get_room_uri());
                 //save_data();
             }
         });
@@ -142,8 +152,9 @@ public class MainFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                layoutParams = new FrameLayout.LayoutParams(60, 60);
+                FrameLayout.LayoutParams img_l = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 a = new ImageView(getContext());
+                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(100,100);
                 switch(spinner.getSelectedItemPosition()){
                     case 0:
                         a.setImageResource(R.drawable.icon_lamp);
@@ -154,20 +165,44 @@ public class MainFragment extends Fragment {
                         a.setTag(R.drawable.icon_plant);
                         break;
                 }
+                a.setLayoutParams(img_l);
                 a.setClickable(true);
-                a.setOnClickListener(new ImageClickLIstener(getContext(),i++,tmp));
+                a.setLongClickable(true);
+                a.setOnClickListener(new DoubleClickListener(){
+                    @Override
+                    public void onSingleClick(View v) {
+                        tmp.setText("Single");
+                    }
 
+                    @Override
+                    public void onDoubleClick(View v) {
+                        tmp.setText("LONG");
+                        //openFragment();
+
+                    }
+                });
+                a.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        BottomSheetDialog bottom = new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
+                        bottom.setContentView(R.layout.bottom_sheet_layout);
+                        bottom.setCanceledOnTouchOutside(false);
+                        TextView text = bottom.findViewById(R.id.sheet_text);
+                        text.setText(v.toString());
+                        bottom.show();
+                        return false;
+                    }
+                });
                 a.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View view, MotionEvent event) {
+
                         if(create_mode) {
                             switch (event.getAction()) {
-
                                 case MotionEvent.ACTION_DOWN:
                                     mPrevX = view.getX() - event.getRawX();
                                     mPrevY = view.getY() - event.getRawY();
                                     break;
-
                                 case MotionEvent.ACTION_MOVE:
                                     view.animate()
                                             .x(event.getRawX() + mPrevX)
@@ -175,20 +210,22 @@ public class MainFragment extends Fragment {
                                             .setDuration(0)
                                             .start();
                                     break;
-                                case MotionEvent.ACTION_UP:
-                                    break;
                                 default:
                                     return false;
                             }
                         }
-                        return true;
+                        return false;
                     }
                 });
-                a.setX(100);
+
+                a.setX(100f);
                 a.setY(0f);
+
                 frameLayout.addView(a,layoutParams);
             }
         });
+
+
         return view;
     }
 
@@ -196,8 +233,8 @@ public class MainFragment extends Fragment {
         realm.executeTransactionAsync(new Realm.Transaction() {
             @Override
             public void execute(Realm bgRealm) {
-/*                Number id_ = bgRealm.where(MyObject.class).max("id");
-                int id= (id_==null)? 1:id_.intValue()+1;*/
+                Number id_ = bgRealm.where(MyObject.class).max("id");
+                int id= (id_==null)? 1:id_.intValue()+1;
                 MyObject myObject = bgRealm.createObject(MyObject.class);
                 myObject.setName("" + data_i++);
                 myObject.setCord_x(a.getX());
@@ -244,8 +281,8 @@ public class MainFragment extends Fragment {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if(create_mode) {
-                        switch (event.getAction()) {
 
+                        switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
                                 mPrevX = view.getX() - event.getRawX();
                                 mPrevY = view.getY() - event.getRawY();
@@ -290,8 +327,9 @@ public class MainFragment extends Fragment {
                         final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
                         final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                         image.setImageBitmap(selectedImage);
+
                         File file = new File(getContext());
-                        file.set_room_uri(imageUri);
+                        file.set_room_uri(selectedImage);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -299,5 +337,6 @@ public class MainFragment extends Fragment {
                 break;
         }
     }
+
 
 }

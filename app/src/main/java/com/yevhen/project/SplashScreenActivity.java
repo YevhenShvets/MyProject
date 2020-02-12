@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +48,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         logo = (ImageView) findViewById(R.id.splash_logo);
         animation();
+
 
         String email_text, pass_text, email_pass;
 
@@ -139,6 +142,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                 });
     }
+
 
     private void animation() {
         logo.setBackgroundResource(R.drawable.splash_screen_animation);
