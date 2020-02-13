@@ -3,7 +3,12 @@ package com.yevhen.project;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Base64;
+
+import java.io.ByteArrayOutputStream;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -55,16 +60,32 @@ public final class File extends Application {
         editor.clear();
         editor.commit();
     }
-    public void set_room_uri(Uri uri){
-        String u = uri.toString();
+
+    //BITMAP
+    private static String encodeTobase64(Bitmap image) {
+        Bitmap immage = image;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        immage.compress(Bitmap.CompressFormat.PNG,40 ,baos);
+        byte[] b = baos.toByteArray();
+        String imageEncoded = Base64.encodeToString(b, Base64.DEFAULT);
+        return imageEncoded;
+    }
+    private static Bitmap decodeBase64(String input) {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
+
+
+    public void set_room_uri(Bitmap uri){
         myPreferences = context.getSharedPreferences(PLAN_ROOM,MODE_PRIVATE);
         SharedPreferences.Editor editor = myPreferences.edit();
-        editor.putString(ROOM_URI,u);
+        editor.putString(ROOM_URI, encodeTobase64(uri));
         editor.apply();
     }
-    public Uri get_room_uri(){
+    public Bitmap get_room_uri(){
         myPreferences = context.getSharedPreferences(PLAN_ROOM,MODE_PRIVATE);
-        return  Uri.parse(myPreferences.getString(ROOM_URI,""));
+        String a = myPreferences.getString(ROOM_URI,"");
+        return decodeBase64(myPreferences.getString(ROOM_URI,""));
     }
 
 }
