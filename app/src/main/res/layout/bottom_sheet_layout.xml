@@ -10,22 +10,110 @@
         android:id="@+id/sheet_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="29dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="220dp"
         android:text="EXIT"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/sheet_edit_name">
 
     </Button>
 
-    <TextView
-        android:id="@+id/sheet_text"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/sheet_edit_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/sheet_text_back"
+        android:fontFamily="@font/my_font_chalet"
+        android:hint="Name"
+        android:padding="5dp"
         android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </TextView>
+    </EditText>
+
+    <EditText
+        android:id="@+id/sheet_edit_x"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/sheet_text_back"
+        android:fontFamily="@font/my_font_chalet"
+        android:hint="width"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/sheet_edit_name"
+        app:layout_constraintTop_toBottomOf="@+id/sheet_edit_name">
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/sheet_edit_y"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/sheet_text_back"
+        android:fontFamily="@font/my_font_chalet"
+        android:hint="height"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/gray"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/sheet_edit_name"
+        app:layout_constraintTop_toBottomOf="@+id/sheet_edit_name">
+
+    </EditText>
+
+    <TextView
+        android:id="@+id/sheet_text_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name:"
+        android:textColor="@color/black"
+        android:fontFamily="@font/my_font_chalet"
+        app:layout_constraintBottom_toTopOf="@+id/sheet_edit_name"
+        app:layout_constraintStart_toStartOf="@+id/sheet_edit_name" />
+
+    <TextView
+        android:id="@+id/sheet_text_x"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/my_font_chalet"
+        android:text="Width:"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/sheet_edit_x"
+        app:layout_constraintStart_toStartOf="@+id/sheet_edit_x" />
+
+    <TextView
+        android:id="@+id/sheet_text_y"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/my_font_chalet"
+        android:text="Height:"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/sheet_edit_y"
+        app:layout_constraintStart_toStartOf="@+id/sheet_edit_y" />
+
+    <ImageView
+        android:id="@+id/sheet_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="150dp"
+        android:background="@drawable/background_icon"
+        android:backgroundTint="@color/colorFon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/icon_lamp_" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

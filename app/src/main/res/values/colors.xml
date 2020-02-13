@@ -20,4 +20,5 @@
     <color name="green">#66BB6A</color>
     <color name="loading_back_color">#80000000</color>
     <color name="eror_color">#DD2C00</color>
+    <color name="my">#1C3988</color>
 </resources>

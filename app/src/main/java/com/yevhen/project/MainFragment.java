@@ -3,6 +3,7 @@ package com.yevhen.project;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.Image;
@@ -187,12 +188,23 @@ public class MainFragment extends Fragment {
                         BottomSheetDialog bottom = new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
                         bottom.setContentView(R.layout.bottom_sheet_layout);
                         bottom.setCanceledOnTouchOutside(false);
-                        TextView text = bottom.findViewById(R.id.sheet_text);
-                        text.setText(v.toString());
+                        //TextView text = bottom.findViewById(R.id.sheet_text);
+                       // text.setText(v.toString());
+                        EditText edit1 = (EditText) bottom.findViewById(R.id.sheet_edit_x);
+                        EditText edit2 = (EditText) bottom.findViewById(R.id.sheet_edit_y);
+                        Button bu = (Button) bottom.findViewById(R.id.sheet_button);
+                        ImageView img1 = (ImageView)bottom.findViewById(R.id.sheet_image);
+                        bu.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                               // img1.setBackgroundColor(R.color.colorFon);
+                            }
+                        });
                         bottom.show();
                         return false;
                     }
                 });
+
                 a.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View view, MotionEvent event) {
