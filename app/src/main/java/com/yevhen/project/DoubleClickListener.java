@@ -4,6 +4,8 @@ import android.view.View;
 
 import androidx.fragment.app.Fragment;
 
+import com.yevhen.project.Class.MyObject;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -11,8 +13,10 @@ import androidx.fragment.app.Fragment;
 public abstract class DoubleClickListener implements View.OnClickListener {
 
     private static final long DOUBLE_CLICK_TIME_DELTA = 300;//milliseconds
+    private long lastClickTime = 0;
 
-    long lastClickTime = 0;
+    public DoubleClickListener() {
+    }
 
     @Override
     public void onClick(View v) {
@@ -27,4 +31,7 @@ public abstract class DoubleClickListener implements View.OnClickListener {
 
     public abstract void onSingleClick(View v);
     public abstract void onDoubleClick(View v);
+    public String getI(){
+        return ""+ 1;
+    }
 }

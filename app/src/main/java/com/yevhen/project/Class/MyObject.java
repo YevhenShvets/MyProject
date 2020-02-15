@@ -6,10 +6,20 @@ import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
 public class MyObject extends RealmObject {
+    @PrimaryKey
+    int id;
     String name;
     float cord_x;
     float cord_y;
     int image_id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

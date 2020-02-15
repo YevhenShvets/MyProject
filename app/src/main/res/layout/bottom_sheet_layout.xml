@@ -104,16 +104,5 @@
         app:layout_constraintBottom_toTopOf="@+id/sheet_edit_y"
         app:layout_constraintStart_toStartOf="@+id/sheet_edit_y" />
 
-    <ImageView
-        android:id="@+id/sheet_image"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="150dp"
-        android:background="@drawable/background_icon"
-        android:backgroundTint="@color/colorFon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/icon_lamp_" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,17 +6,21 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.util.LruCache;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -58,6 +62,8 @@ import java.util.Timer;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
+import io.realm.exceptions.RealmException;
+import io.realm.exceptions.RealmFileException;
 import io.realm.internal.RealmObjectProxy;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -81,15 +87,14 @@ public class MainFragment extends Fragment {
     Button button_photo;
     FrameLayout frameLayout;
     FrameLayout.LayoutParams layoutParams;
+    FrameLayout.LayoutParams img_l;
     Realm realm;
     ImageView a;
     ImageView image;
+    Switch switch1;
     View view;
-    Bitmap bitmap;
-
 
     private static final int GALLERY_REQUEST = 1;
-
 
     float mPrevX,mPrevY;
     boolean create_mode = false;
@@ -108,22 +113,26 @@ public class MainFragment extends Fragment {
         Button button  = (Button) view.findViewById(R.id.b1);
         tmp = (TextView) view.findViewById(R.id.tmp_text);
         spinner = (Spinner) view.findViewById(R.id.tmp_spinner);
+        switch1 = (Switch) view.findViewById(R.id.tmp_switch);
         button_set = (Button) view.findViewById(R.id.tmp_button_set);
         button_get = (Button) view.findViewById(R.id.tmp_button_get);
         button_photo = (Button) view.findViewById(R.id.tmp_button_photo);
         image = (ImageView) view.findViewById(R.id.tmp_image);
-        layoutParams = new FrameLayout.LayoutParams(60, 60);
-        realm = Realm.getDefaultInstance();
+        frameLayout = (FrameLayout) view.findViewById(R.id.layout_tmp);
+        layoutParams = new FrameLayout.LayoutParams(80, 80);
+        img_l = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        final Switch switch1 = (Switch) view.findViewById(R.id.tmp_switch);
+        try {
+            realm = Realm.getDefaultInstance();
+        }catch (Exception ex){
+            Log.d("ERROR",ex.getMessage());
+        }
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 create_mode = isChecked;
             }
         });
-
-        frameLayout = (FrameLayout) view.findViewById(R.id.layout_tmp);
 
         //пошук фото
         button_photo.setOnClickListener(new View.OnClickListener() {
@@ -134,28 +143,24 @@ public class MainFragment extends Fragment {
                     startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
             }
         });
-
         button_set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 image.setImageBitmap(new File(getContext()).get_room_uri());
-                //save_data();
+                save_data();
             }
         });
-
         button_get.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //get_object();
+                get_object();
             }
         });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FrameLayout.LayoutParams img_l = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                a = new ImageView(getContext());
-                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(100,100);
+                a = new ImageIcon(getContext(),new MyObject());
                 switch(spinner.getSelectedItemPosition()){
                     case 0:
                         a.setImageResource(R.drawable.icon_lamp);
@@ -166,20 +171,16 @@ public class MainFragment extends Fragment {
                         a.setTag(R.drawable.icon_plant);
                         break;
                 }
-                a.setLayoutParams(img_l);
-                a.setClickable(true);
-                a.setLongClickable(true);
-                a.setOnClickListener(new DoubleClickListener(){
+                a.setOnClickListener(new DoubleClickListener() {
                     @Override
                     public void onSingleClick(View v) {
-                        tmp.setText("Single");
+                        tmp.setText("single");
+
                     }
 
                     @Override
                     public void onDoubleClick(View v) {
-                        tmp.setText("LONG");
-                        //openFragment();
-
+                        tmp.setText("double");
                     }
                 });
                 a.setOnLongClickListener(new View.OnLongClickListener() {
@@ -188,18 +189,6 @@ public class MainFragment extends Fragment {
                         BottomSheetDialog bottom = new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
                         bottom.setContentView(R.layout.bottom_sheet_layout);
                         bottom.setCanceledOnTouchOutside(false);
-                        //TextView text = bottom.findViewById(R.id.sheet_text);
-                       // text.setText(v.toString());
-                        EditText edit1 = (EditText) bottom.findViewById(R.id.sheet_edit_x);
-                        EditText edit2 = (EditText) bottom.findViewById(R.id.sheet_edit_y);
-                        Button bu = (Button) bottom.findViewById(R.id.sheet_button);
-                        ImageView img1 = (ImageView)bottom.findViewById(R.id.sheet_image);
-                        bu.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                               // img1.setBackgroundColor(R.color.colorFon);
-                            }
-                        });
                         bottom.show();
                         return false;
                     }
@@ -229,15 +218,9 @@ public class MainFragment extends Fragment {
                         return false;
                     }
                 });
-
-                a.setX(100f);
-                a.setY(0f);
-
                 frameLayout.addView(a,layoutParams);
             }
         });
-
-
         return view;
     }
 
@@ -247,12 +230,12 @@ public class MainFragment extends Fragment {
             public void execute(Realm bgRealm) {
                 Number id_ = bgRealm.where(MyObject.class).max("id");
                 int id= (id_==null)? 1:id_.intValue()+1;
-                MyObject myObject = bgRealm.createObject(MyObject.class);
+                MyObject myObject = bgRealm.createObject(MyObject.class,id);
                 myObject.setName("" + data_i++);
                 myObject.setCord_x(a.getX());
                 myObject.setCord_y(a.getY());
-                int img_id = 1;
 
+                int img_id = 1;
                 switch ((int)a.getTag()){
                     case R.drawable.icon_lamp: img_id = 1; break;
                     case R.drawable.icon_plant: img_id = 2; break;
@@ -267,39 +250,51 @@ public class MainFragment extends Fragment {
         }, new Realm.Transaction.OnError() {
             @Override
             public void onError(Throwable error) {
-                Toast.makeText(getContext(),"-",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"-"+ error.getMessage(),Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    RealmResults<MyObject> myObjects;
-
     private void get_object(){
+        RealmResults<MyObject> myObjects;
         myObjects = realm.where(MyObject.class).findAll();
-        FrameLayout.LayoutParams idsa = new FrameLayout.LayoutParams(15,15);
-        ImageView img;
         for(MyObject myObject: myObjects){
-            img = new ImageView(getContext());
-            switch (myObject.getImage_id()) {
-                case 1:
-                    img.setImageResource(R.drawable.icon_lamp); break;
-                case 2:
-                    img.setImageResource(R.drawable.icon_plant); break;
-            }
-            img.setLayoutParams(idsa);
-            img.setClickable(true);
-            img.setOnClickListener(new ImageClickLIstener(getContext(),Function.toint(myObject.getName()),tmp));
-            img.setOnTouchListener(new View.OnTouchListener() {
+            a = new ImageIcon(getContext(),myObject);
+            a.setOnClickListener(new DoubleClickListener(){
                 @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if(create_mode) {
+                public void onSingleClick(View v) {
+                    v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CBE8E8EC")));
+                    //міняти розмір працює
+                    //v.setLayoutParams(new FrameLayout.LayoutParams(50,50));
+                    tmp.setText("Single"+ getI());
+                }
 
+                @Override
+                public void onDoubleClick(View v) {
+                    v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E2FDC15D")));
+                    tmp.setText("Double");
+                    delete_object(v);
+                }
+            });
+            a.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    BottomSheetDialog bottom = new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
+                    bottom.setContentView(R.layout.bottom_sheet_layout);
+                    bottom.setCanceledOnTouchOutside(false);
+                    bottom.show();
+                    return false;
+                }
+            });
+            a.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent event) {
+                    if(create_mode) {
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
                                 mPrevX = view.getX() - event.getRawX();
                                 mPrevY = view.getY() - event.getRawY();
                                 break;
-
                             case MotionEvent.ACTION_MOVE:
                                 view.animate()
                                         .x(event.getRawX() + mPrevX)
@@ -307,18 +302,14 @@ public class MainFragment extends Fragment {
                                         .setDuration(0)
                                         .start();
                                 break;
-                            case MotionEvent.ACTION_UP:
-                                break;
                             default:
                                 return false;
                         }
                     }
-                    return true;
-                }});
-
-            img.setX(myObject.getCord_x());
-            img.setY(myObject.getCord_y());
-            frameLayout.addView(img,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    return false;
+                }
+            });
+            frameLayout.addView(a,layoutParams);
         }
     }
 
@@ -327,6 +318,8 @@ public class MainFragment extends Fragment {
         super.onDestroy();
         realm.close();
     }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -350,5 +343,35 @@ public class MainFragment extends Fragment {
         }
     }
 
+    private void delete_from_layout(){
 
+    }
+
+
+    //DELETE REALM OBJECT
+    private void delete_object(final View v){
+        MyObject obj=((ImageIcon)v).getObject();
+        final int id = obj.getId();
+
+        realm.executeTransactionAsync(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<MyObject> result = realm.where(MyObject.class).equalTo("id", id).findAll();
+                result.deleteAllFromRealm();
+            }
+        }, new Realm.Transaction.OnSuccess() {
+            @Override
+            public void onSuccess() {
+                frameLayout.removeView(v);
+            }
+        });
+    }
+    private void delete_all_object(){
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.delete(MyObject.class);
+            }
+        });
+    }
 }
