@@ -7,13 +7,37 @@
     android:background="@drawable/solid_bottom_sheet">
 
     <Button
-        android:id="@+id/sheet_button"
+        android:id="@+id/sheet_buttonOk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="220dp"
-        android:text="EXIT"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="172dp"
+        android:text="Ok"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sheet_edit_name">
+
+    </Button>
+
+    <Button
+        android:id="@+id/sheet_buttonDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:text="Delete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sheet_edit_name">
+
+    </Button>
+
+    <Button
+        android:id="@+id/sheet_buttonClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="172dp"
+        android:layout_marginEnd="16dp"
+        android:text="Close"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sheet_edit_name">
 
     </Button>

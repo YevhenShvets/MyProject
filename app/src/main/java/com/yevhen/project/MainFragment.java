@@ -93,6 +93,7 @@ public class MainFragment extends Fragment {
     ImageView image;
     Switch switch1;
     View view;
+    String temp;
 
     private static final int GALLERY_REQUEST = 1;
 
@@ -119,35 +120,36 @@ public class MainFragment extends Fragment {
         button_photo = (Button) view.findViewById(R.id.tmp_button_photo);
         image = (ImageView) view.findViewById(R.id.tmp_image);
         frameLayout = (FrameLayout) view.findViewById(R.id.layout_tmp);
-        layoutParams = new FrameLayout.LayoutParams(80, 80);
+        layoutParams = new FrameLayout.LayoutParams(100, 100);
         img_l = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
+       // Realm.deleteRealm(Realm.getDefaultConfiguration());
         try {
             realm = Realm.getDefaultInstance();
         }catch (Exception ex){
             Log.d("ERROR",ex.getMessage());
         }
+
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 create_mode = isChecked;
             }
         });
-
         //пошук фото
         button_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                    photoPickerIntent.setType("image/*");
-                    startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
+                delete_all_object();
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
             }
         });
         button_set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 image.setImageBitmap(new File(getContext()).get_room_uri());
-                save_data();
             }
         });
         button_get.setOnClickListener(new View.OnClickListener() {
@@ -163,62 +165,13 @@ public class MainFragment extends Fragment {
                 a = new ImageIcon(getContext(),new MyObject());
                 switch(spinner.getSelectedItemPosition()){
                     case 0:
-                        a.setImageResource(R.drawable.icon_lamp);
                         a.setTag(R.drawable.icon_lamp);
                         break;
                     case 1:
-                        a.setImageResource(R.drawable.icon_plant);
                         a.setTag(R.drawable.icon_plant);
                         break;
                 }
-                a.setOnClickListener(new DoubleClickListener() {
-                    @Override
-                    public void onSingleClick(View v) {
-                        tmp.setText("single");
-
-                    }
-
-                    @Override
-                    public void onDoubleClick(View v) {
-                        tmp.setText("double");
-                    }
-                });
-                a.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        BottomSheetDialog bottom = new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
-                        bottom.setContentView(R.layout.bottom_sheet_layout);
-                        bottom.setCanceledOnTouchOutside(false);
-                        bottom.show();
-                        return false;
-                    }
-                });
-
-                a.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View view, MotionEvent event) {
-
-                        if(create_mode) {
-                            switch (event.getAction()) {
-                                case MotionEvent.ACTION_DOWN:
-                                    mPrevX = view.getX() - event.getRawX();
-                                    mPrevY = view.getY() - event.getRawY();
-                                    break;
-                                case MotionEvent.ACTION_MOVE:
-                                    view.animate()
-                                            .x(event.getRawX() + mPrevX)
-                                            .y(event.getRawY() + mPrevY)
-                                            .setDuration(0)
-                                            .start();
-                                    break;
-                                default:
-                                    return false;
-                            }
-                        }
-                        return false;
-                    }
-                });
-                frameLayout.addView(a,layoutParams);
+                save_data();
             }
         });
         return view;
@@ -231,21 +184,19 @@ public class MainFragment extends Fragment {
                 Number id_ = bgRealm.where(MyObject.class).max("id");
                 int id= (id_==null)? 1:id_.intValue()+1;
                 MyObject myObject = bgRealm.createObject(MyObject.class,id);
-                myObject.setName("" + data_i++);
-                myObject.setCord_x(a.getX());
-                myObject.setCord_y(a.getY());
-
                 int img_id = 1;
                 switch ((int)a.getTag()){
                     case R.drawable.icon_lamp: img_id = 1; break;
                     case R.drawable.icon_plant: img_id = 2; break;
                 }
                 myObject.setImage_id(img_id);
+                a.setId(myObject.getId());
             }
         }, new Realm.Transaction.OnSuccess() {
             @Override
             public void onSuccess() {
                 Toast.makeText(getContext(),"+",Toast.LENGTH_SHORT).show();
+                get_object(a.getId());
             }
         }, new Realm.Transaction.OnError() {
             @Override
@@ -260,13 +211,25 @@ public class MainFragment extends Fragment {
         myObjects = realm.where(MyObject.class).findAll();
         for(MyObject myObject: myObjects){
             a = new ImageIcon(getContext(),myObject);
-            a.setOnClickListener(new DoubleClickListener(){
+            add_params(a);
+        }
+    }
+    private void get_object(int id){
+        RealmResults<MyObject> myObjects;
+        myObjects = realm.where(MyObject.class).equalTo("id",id).findAll();
+        MyObject myObject = myObjects.get(0);
+        a = new ImageIcon(getContext(),myObject);
+        add_params(a);
+    }
+    private void add_params(ImageView image){
+        if(image!=null) {
+            image.setOnClickListener(new DoubleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
                     v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CBE8E8EC")));
                     //міняти розмір працює
                     //v.setLayoutParams(new FrameLayout.LayoutParams(50,50));
-                    tmp.setText("Single"+ getI());
+                    tmp.setText("Single" + getI());
                 }
 
                 @Override
@@ -276,20 +239,18 @@ public class MainFragment extends Fragment {
                     delete_object(v);
                 }
             });
-            a.setOnLongClickListener(new View.OnLongClickListener() {
+            image.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    BottomSheetDialog bottom = new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
-                    bottom.setContentView(R.layout.bottom_sheet_layout);
-                    bottom.setCanceledOnTouchOutside(false);
-                    bottom.show();
+                    BottomSheet_Open(create_mode, v);
                     return false;
                 }
             });
-            a.setOnTouchListener(new View.OnTouchListener() {
+
+            image.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
-                    if(create_mode) {
+                    if (create_mode) {
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
                                 mPrevX = view.getX() - event.getRawX();
@@ -309,17 +270,16 @@ public class MainFragment extends Fragment {
                     return false;
                 }
             });
-            frameLayout.addView(a,layoutParams);
+            frameLayout.addView(image, layoutParams);
         }
     }
+
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         realm.close();
     }
-
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -343,8 +303,11 @@ public class MainFragment extends Fragment {
         }
     }
 
-    private void delete_from_layout(){
-
+    private void BottomSheet_Open(boolean create_mode,View v){
+        if(!create_mode) {
+            BottomSheetDialog bottom = new MyBottomSheetDialog(getContext(), R.style.BottomSheetDialogTheme, v,frameLayout);
+            bottom.show();
+        }
     }
 
 
@@ -374,4 +337,5 @@ public class MainFragment extends Fragment {
             }
         });
     }
+
 }

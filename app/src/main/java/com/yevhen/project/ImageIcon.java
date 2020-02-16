@@ -19,7 +19,6 @@ import com.yevhen.project.Class.MyObject;
 @SuppressLint("AppCompatCustomView")
 public class ImageIcon extends ImageView {
     private MyObject object;
-    private  float mPrevX,mPrevY;
     private FrameLayout.LayoutParams img_l;
 
     public ImageIcon(Context context, MyObject object) {
@@ -27,6 +26,10 @@ public class ImageIcon extends ImageView {
         img_l = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.object = object;
         setClickable(true);
+        setMinimumHeight(30);
+        setMinimumWidth(30);
+        setMaxHeight(300);
+        setMaxWidth(300);
         setLongClickable(true);
         setBackgroundResource(R.drawable.background_icon);
         setX(object.getCord_x());
@@ -42,7 +45,8 @@ public class ImageIcon extends ImageView {
     }
 
     public MyObject getObject(){
-        return object;
+        return new MyObject(object);
     }
+    public void setObject(MyObject myObject){this.object= myObject;}
 
 }

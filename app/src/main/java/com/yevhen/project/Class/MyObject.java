@@ -11,7 +11,44 @@ public class MyObject extends RealmObject {
     String name;
     float cord_x;
     float cord_y;
+    int width;
+    int height;
     int image_id;
+
+    public MyObject(MyObject temp){
+        this.id = temp.id;
+        this.image_id = temp.image_id;
+        this.name = temp.name;
+        this.cord_y = temp.cord_y;
+        this.cord_x = temp.cord_x;
+        this.width = temp.width;
+        this.height = temp.height;
+    }
+
+    public MyObject() {
+        this.name = "MyName";
+        this.cord_x = 100f;
+        this.cord_y = 100f;
+        this.width = 100;
+        this.height = 100;
+        this.image_id = 1;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
 
     public int getId() {
         return id;
