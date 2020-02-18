@@ -41,7 +41,6 @@ public class SplashScreenActivity extends AppCompatActivity {
     public ImageView logo;
     private AnimationDrawable animationDrawable;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

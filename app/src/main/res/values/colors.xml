@@ -22,4 +22,7 @@
     <color name="eror_color">#DD2C00</color>
     <color name="my">#E2FDC15D</color>
     <color name="yellow">#FFD600</color>
+    <color name="switchTrackDisable">#0091EA</color>
+    <color name="switchTrackActive">#304FFE</color>
+    <color name="switchTrackNormal">#00C853</color>
 </resources>

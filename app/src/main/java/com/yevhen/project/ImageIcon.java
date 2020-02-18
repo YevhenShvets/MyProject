@@ -26,6 +26,7 @@ public class ImageIcon extends ImageView {
         img_l = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         this.object = object;
         setClickable(true);
+        setLayoutParams(new FrameLayout.LayoutParams(object.getWidth(),object.getHeight()));
         setMinimumHeight(30);
         setMinimumWidth(30);
         setMaxHeight(300);
@@ -42,6 +43,20 @@ public class ImageIcon extends ImageView {
                 setImageResource(R.drawable.icon_plant);
                 break;
         }
+    }
+
+    public void setCord(float x, float y){
+        MyObject tmp = getObject();
+        tmp.setCord_x(x);
+        tmp.setCord_y(y);
+        setObject(tmp);
+    }
+
+    public void setSize(int w,int h){
+        MyObject tmp = getObject();
+        tmp.setWidth(w);
+        tmp.setHeight(h);
+        setObject(tmp);
     }
 
     public MyObject getObject(){

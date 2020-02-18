@@ -76,6 +76,7 @@ public class MyBottomSheetDialog extends BottomSheetDialog {
             @Override
             public void onClick(View v) {
                delete_object(view);
+               dismiss();
             }
         });
     }

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Project</string>
     <string name="Cancel">Cancel</string>
+    <string name="Create">Створити</string>
     <string name="Ok">Ok</string>
     <string name="POST">Відправити</string>
     <string name="connect_to_wifi">Connect to WiFi</string>

@@ -13,6 +13,7 @@ public class MyObject extends RealmObject {
     float cord_y;
     int width;
     int height;
+    boolean status;
     int image_id;
 
     public MyObject(MyObject temp){
@@ -23,6 +24,7 @@ public class MyObject extends RealmObject {
         this.cord_x = temp.cord_x;
         this.width = temp.width;
         this.height = temp.height;
+        this.status = temp.status;
     }
 
     public MyObject() {
@@ -32,6 +34,15 @@ public class MyObject extends RealmObject {
         this.width = 100;
         this.height = 100;
         this.image_id = 1;
+        this.status = false;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 
     public int getWidth() {

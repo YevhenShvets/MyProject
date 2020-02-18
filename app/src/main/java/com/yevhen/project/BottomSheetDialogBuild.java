@@ -1,144 +1,111 @@
 package com.yevhen.project;
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Base64;
-import android.util.Log;
-import android.util.LruCache;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.yevhen.project.Class.MyObject;
-import com.yevhen.project.Class.Users;
-import com.yevhen.project.LoginActivity;
-
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import org.json.JSONObject;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.yevhen.project.Class.MyObject;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Timer;
 
 import io.realm.Realm;
-import io.realm.RealmQuery;
 import io.realm.RealmResults;
-import io.realm.exceptions.RealmException;
-import io.realm.exceptions.RealmFileException;
-import io.realm.internal.RealmObjectProxy;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
-import static android.view.Gravity.*;
 
+public class BottomSheetDialogBuild extends BottomSheetDialog {
+    Button button_create;
+    Button button_photo;
+    Spinner spinner;
+    Switch switch1;
 
-public class MainFragment extends Fragment {
-
-    FrameLayout frameLayout;
     Realm realm;
+    FrameLayout frameLayout;
+    FrameLayout.LayoutParams img_l;
+    MainFragment mainFragment;
     ImageView a;
-    ImageView plan_img;
-    View view;
 
-    private static final int GALLERY_REQUEST = 1;
-
-    float mPrevX,mPrevY;
+   float mPrevX,mPrevY;
     boolean create_mode = false;
 
-    public MainFragment() {
-        // Required empty public constructor
+
+    public BottomSheetDialogBuild(@NonNull Context context, int theme,Realm realm,FrameLayout frameLayout,MainFragment mainFragment) {
+        super(context, theme);
+        this.realm = realm;
+        this.frameLayout = frameLayout;
+        this.mainFragment = mainFragment;
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.plan_layout, container, false);
-        //Realm.deleteRealm(Realm.getDefaultConfiguration());
-        try {
-            realm = Realm.getDefaultInstance();
-            get_object();
-        }catch (Exception ex){
-            Log.d("ERROR",ex.getMessage());
-        }
-        plan_img = (ImageView) view.findViewById(R.id.plan_img_img);
-        plan_img.setImageBitmap(new File(getContext()).get_room_uri());
-        frameLayout = (FrameLayout) view.findViewById(R.id.frame_layout);
-        ImageView button = (ImageView) view.findViewById(R.id.plan_settings_img);
-        button.setOnClickListener(new View.OnClickListener() {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.build_layout);
+
+       //setCanceledOnTouchOutside(false);
+        button_create = (Button) findViewById(R.id.build_create_button);
+        spinner = (Spinner) findViewById(R.id.build_spinner);
+        switch1 = (Switch) findViewById(R.id.build_switch);
+        button_photo = (Button) findViewById(R.id.build_button_photo);
+
+        img_l = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                create_mode = isChecked;
+            }
+        });
+        //пошук фото
+        button_photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BottomSheetDialogBuild build = new BottomSheetDialogBuild(getContext(),R.style.BottomSheetDialogTheme1,realm,frameLayout,MainFragment.this);
-                build.show();
+                mainFragment.setPlan_img();
+                dismiss();
+
             }
         });
 
-        return view;
+        button_create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                a = new ImageIcon(getContext(),new MyObject());
+                switch(spinner.getSelectedItemPosition()){
+                    case 0:
+                        a.setTag(R.drawable.icon_lamp);
+                        break;
+                    case 1:
+                        a.setTag(R.drawable.icon_plant);
+                        break;
+                }
+                save_data();
+            }
+        });
     }
 
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        upgrade_object();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        realm.close();
-    }
-
-    private void BottomSheet_Open(boolean create_mode,View v){
-        if(!create_mode) {
-            BottomSheetDialog bottom = new MyBottomSheetDialog(getContext(), R.style.BottomSheetDialogTheme, v,frameLayout);
-            bottom.show();
-        }
-    }
     private void save_data(){
         try {
             realm.executeTransactionAsync(new Realm.Transaction() {
@@ -251,60 +218,10 @@ public class MainFragment extends Fragment {
         }
 
     }
-
-    //REALM
-    //UPGRADE
-    private void upgrade_object(){
-        if(frameLayout!=null&& realm!=null){
-            View view;
-            for(int i=0;i<frameLayout.getChildCount();i++){
-                view = frameLayout.getChildAt(i);
-                MyObject myObject = ((ImageIcon)view).getObject();
-                realm.beginTransaction();
-                realm.copyToRealmOrUpdate(myObject);
-                realm.commitTransaction();
-            }
-        }
-    }
-
-    //DELETE REALM OBJECT
-    private void delete_all_object(){
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                realm.delete(MyObject.class);
-            }
-        });
-    }
-
-
-
-    public void setPlan_img(){
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
-            case GALLERY_REQUEST:
-                if (resultCode == RESULT_OK) {
-                    try {
-                        final Uri imageUri = data.getData();
-                        final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
-                        final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                        plan_img.setImageBitmap(selectedImage);
-
-                        File file = new File(getContext());
-                        file.set_room_uri(selectedImage);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
+    private void BottomSheet_Open(boolean create_mode,View v){
+        if(!create_mode) {
+            BottomSheetDialog bottom = new MyBottomSheetDialog(getContext(), R.style.BottomSheetDialogTheme, v,frameLayout);
+            bottom.show();
         }
     }
 

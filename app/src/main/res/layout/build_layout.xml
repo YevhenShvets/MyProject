@@ -2,101 +2,126 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <Button
-        android:id="@+id/b1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="1.6dp"
+        android:visibility="invisible"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
+        android:background="#A1FF6D00"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/build_button_photo"
+        tools:layout_editor_absoluteX="16dp" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1.6dp"
+        android:layout_marginTop="24dp"
+        android:background="#A1FF6D00"
+        app:layout_constraintTop_toBottomOf="@+id/build_spinner"
+        tools:layout_editor_absoluteX="16dp" />
 
     <Button
-        android:id="@+id/tmp_button_photo"
+        android:id="@+id/build_create_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:text="Photo"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="8dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:background="@drawable/background_icon"
+        android:backgroundTint="@color/orange"
+        android:fontFamily="@font/my_font_sony"
+        android:text="@string/Create"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/build_spinner"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/build_spinner" />
+
+    <Button
+        android:id="@+id/build_button_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="60dp"
+        android:background="@drawable/background_icon"
+        android:backgroundTint="#8364DD17"
+        android:fontFamily="@font/my_font_sony"
+        android:text="Встановити фото плану"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view">
 
     </Button>
 
     <Spinner
-        android:id="@+id/tmp_spinner"
+        android:id="@+id/build_spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@color/orange"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/background_icon"
+        android:backgroundTint="@color/orange"
         android:entries="@array/build_item_list"
-        app:layout_constraintEnd_toStartOf="@id/b1"
+        android:paddingStart="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        app:layout_constraintEnd_toStartOf="@id/build_create_button"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/build_view_top" />
 
-    <TextView
-        android:id="@+id/tmp_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/build_view_top"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#4AFFD600"
+        android:paddingBottom="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Switch
-        android:id="@+id/tmp_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Switch"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/b1"
-        app:layout_constraintTop_toBottomOf="@+id/b1" />
+        <TextView
+            android:id="@+id/build_text_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/my_font_sony"
+            android:text="Create Mode"
+            android:textColor="@color/gray"
+            android:textSize="28sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/tmp_button_set"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="SET"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        </TextView>
 
-    <Button
-        android:id="@+id/tmp_button_get"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="GET"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/tmp_image"
+        <Switch
+            android:id="@+id/build_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/build_text_create"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/build_text_create" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <View
+        android:id="@+id/view3"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="@+id/layout_tmp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tmp_switch">
+        android:layout_height="1.6dp"
+        android:background="#A1FF6D00"
+        app:layout_constraintTop_toBottomOf="@+id/build_view_top"
+        tools:layout_editor_absoluteX="16dp" />
 
-    </ImageView>
-
-    <FrameLayout
-        android:id="@+id/layout_tmp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

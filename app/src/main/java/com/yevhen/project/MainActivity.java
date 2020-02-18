@@ -62,76 +62,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     Context context = this;
-    TextView tv1;
-    EditText e1, e2;
-    Button b1;
-    ImageView logo;
-    float aa =100f;
-    float mPrevX,mPrevY;
-    boolean create_mode = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.build_layout);
-
-        Button button  = (Button) findViewById(R.id.b1);
-        final TextView tmp = (TextView) findViewById(R.id.tmp_text);
-        Switch switch1 = (Switch) findViewById(R.id.tmp_switch);
-
-        switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                create_mode = isChecked;
-            }
-        });
-        final FrameLayout frameLayout = (FrameLayout) findViewById(R.id.layout_tmp);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                //layoutParams.gravity = Gravity.CENTER;
-                Button a = new Button(context);
-                a.setWidth(Function.toint(e1.getText().toString()));
-                a.setHeight(Function.toint(e2.getText().toString()));
-                a.setText("BUTTON 1");
-
-                a.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if (create_mode) {
-                            float currX, currY;
-                            switch (event.getAction()) {
-                                case MotionEvent.ACTION_DOWN:
-                                    //tmp.setText("ACTION_DOWN"+ event.getRawX() + " X "+ event.getRawY()+"\n"+v.getX() +" X "+ v.getY());
-                                    mPrevX = event.getX();
-                                    mPrevY = event.getY();
-                                    break;
-                                case MotionEvent.ACTION_MOVE:
-                                    //tmp.setText("ACTION_MOVE"+ event.getX() + " X "+ event.getY()+"\n"+v.getX() +" X "+ v.getY());
-                                    currX = event.getRawX();
-                                    currY = event.getRawY();
-
-                                    v.setX(currX - mPrevX);
-                                    v.setY(currY - mPrevY);
-
-                                    break;
-                                case MotionEvent.ACTION_UP:
-                                    //tmp.setText("ACTION_UP"+ event.getX() + " X "+ event.getY()+"\n"+v.getX() +" X "+ v.getY());
-
-                                    // v.setY(event.getRawY());
-                                    // v.setX(event.getRawX());
-                                    break;
-                            }
-                        }
-                        return false;
-                }});
-                a.setX(aa);
-                a.setY(0f);
-                aa+=10f;
-                frameLayout.addView(a,layoutParams);
-            }
-        });
+        //setContentView(R.layout.build_layout);
 
         /*final LoadingDialog loadingDialog = new LoadingDialog(MainActivity.this);
         loadingDialog.show();
