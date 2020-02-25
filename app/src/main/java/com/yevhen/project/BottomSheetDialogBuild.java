@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -47,9 +49,9 @@ public class BottomSheetDialogBuild extends BottomSheetDialog {
     FrameLayout.LayoutParams img_l;
     MainFragment mainFragment;
     ImageView a;
+    Animation animation;
 
    float mPrevX,mPrevY;
-    boolean create_mode = false;
 
 
     public BottomSheetDialogBuild(@NonNull Context context, int theme,Realm realm,FrameLayout frameLayout,MainFragment mainFragment) {
@@ -69,13 +71,20 @@ public class BottomSheetDialogBuild extends BottomSheetDialog {
         spinner = (Spinner) findViewById(R.id.build_spinner);
         switch1 = (Switch) findViewById(R.id.build_switch);
         button_photo = (Button) findViewById(R.id.build_button_photo);
-
+        animation = AnimationUtils.loadAnimation(getContext(), R.anim.scaling);
         img_l = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
+        switch1.setChecked(MainFragment.create_mode);
         switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                create_mode = isChecked;
+                MainFragment.create_mode = isChecked;
+                if(isChecked == true){
+                    mainFragment.frameCreateMode.setVisibility(View.VISIBLE);
+                    dismiss();
+                }else{
+                    mainFragment.frameCreateMode.setVisibility(View.INVISIBLE);
+                }
             }
         });
         //пошук фото
@@ -104,7 +113,6 @@ public class BottomSheetDialogBuild extends BottomSheetDialog {
             }
         });
     }
-
 
     private void save_data(){
         try {
@@ -163,21 +171,29 @@ public class BottomSheetDialogBuild extends BottomSheetDialog {
             image.setOnClickListener(new DoubleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CBE8E8EC")));
+                    if(v.getBackgroundTintList() == ColorStateList.valueOf(Color.parseColor("#CBE8E8EC")))
+                        v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E2FDC15D")));
+                    else
+                        v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CBE8E8EC")));
                     //міняти розмір працює
                     //v.setLayoutParams(new FrameLayout.LayoutParams(50,50));
+                    v.startAnimation(animation);
                 }
 
                 @Override
                 public void onDoubleClick(View v) {
-                    v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E2FDC15D")));
-                    //delete_object(v);
+                   //delete_object(v);
+
                 }
             });
+            if(((ImageIcon)image).getObject().isStatus())  image.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E2FDC15D")));
+            else
+                image.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CBE8E8EC")));
+
             image.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    BottomSheet_Open(create_mode, v);
+                    BottomSheet_Open(MainFragment.create_mode, v);
                     return false;
                 }
             });
@@ -185,7 +201,7 @@ public class BottomSheetDialogBuild extends BottomSheetDialog {
             image.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
-                    if (create_mode) {
+                    if (MainFragment.create_mode) {
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
                                 mPrevX = view.getX() - event.getRawX();

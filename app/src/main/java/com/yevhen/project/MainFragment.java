@@ -23,6 +23,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -80,15 +82,17 @@ import static android.view.Gravity.*;
 public class MainFragment extends Fragment {
 
     FrameLayout frameLayout;
+    FrameLayout frameCreateMode;
     Realm realm;
     ImageView a;
     ImageView plan_img;
     View view;
+    Animation animation;
 
     private static final int GALLERY_REQUEST = 1;
 
     float mPrevX,mPrevY;
-    boolean create_mode = false;
+    public static boolean create_mode = false;
 
     public MainFragment() {
         // Required empty public constructor
@@ -98,6 +102,7 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.plan_layout, container, false);
+        animation = AnimationUtils.loadAnimation(getContext(), R.anim.scaling);
         //Realm.deleteRealm(Realm.getDefaultConfiguration());
         try {
             realm = Realm.getDefaultInstance();
@@ -108,7 +113,9 @@ public class MainFragment extends Fragment {
         plan_img = (ImageView) view.findViewById(R.id.plan_img_img);
         plan_img.setImageBitmap(new File(getContext()).get_room_uri());
         frameLayout = (FrameLayout) view.findViewById(R.id.frame_layout);
+        frameCreateMode = (FrameLayout) view.findViewById(R.id.frame_create_mode);
         ImageView button = (ImageView) view.findViewById(R.id.plan_settings_img);
+        get_object();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,7 +126,6 @@ public class MainFragment extends Fragment {
 
         return view;
     }
-
 
     @Override
     public void onPause() {
@@ -196,17 +202,25 @@ public class MainFragment extends Fragment {
             image.setOnClickListener(new DoubleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CBE8E8EC")));
+                    if(v.getBackgroundTintList() == ColorStateList.valueOf(Color.parseColor("#CBE8E8EC")))
+                        v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E2FDC15D")));
+                    else
+                        v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CBE8E8EC")));
                     //міняти розмір працює
                     //v.setLayoutParams(new FrameLayout.LayoutParams(50,50));
+                    v.startAnimation(animation);
                 }
 
                 @Override
                 public void onDoubleClick(View v) {
-                    v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E2FDC15D")));
+                   // v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E2FDC15D")));
                     //delete_object(v);
                 }
             });
+                       if(((ImageIcon)image).getObject().isStatus())  image.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E2FDC15D")));
+            else
+                image.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CBE8E8EC")));
+
             image.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {

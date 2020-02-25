@@ -53,6 +53,7 @@ public class Main2Activity extends AppCompatActivity {
         menuItems.add(new MenuItem("Головна сторінка",R.drawable.menu_icon_main));
         menuItems.add(new MenuItem("Підключити хаб",R.drawable.menu_icon_hub));
         menuItems.add(new MenuItem("Налаштування",R.drawable.menu_icon_settings));
+        menuItems.add(new MenuItem("Pass_hub",R.drawable.menu_icon_settings));
 
 
         //then add them to navigation drawer
@@ -90,6 +91,10 @@ public class Main2Activity extends AppCompatActivity {
                     case 2:{
                         fragmentClass = Settings_fragment.class;
                         break;
+                    }
+                    case 3:
+                    {
+                        fragmentClass = Pass_hub_fragment.class;
                     }
                 }
 

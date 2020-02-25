@@ -36,4 +36,25 @@
         android:layout_height="match_parent">
 
     </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frame_create_mode"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.44"
+        android:visibility="invisible"
+        android:background="@color/gray">
+        <TextView
+            android:id="@+id/frame_create_mode_text"
+            android:layout_width="wrap_content"
+            android:text="Create Mode"
+            android:textColor="@color/Black"
+            android:textSize="40sp"
+            android:fontFamily="@font/my_font_sony"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:layout_height="wrap_content">
+
+        </TextView>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
