@@ -48,7 +48,28 @@ public class SplashScreenActivity extends AppCompatActivity {
         logo = (ImageView) findViewById(R.id.splash_logo);
         animation();
 
+        start();
+    }
 
+
+    private void animation() {
+        logo.setBackgroundResource(R.drawable.splash_screen_animation);
+        animationDrawable = (AnimationDrawable) logo.getBackground();
+    }
+
+    private void start_main_activity(){
+        Intent intent = new Intent(SplashScreenActivity.this,Main2Activity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        animationDrawable.start();
+    }
+
+    private void start(){
         String email_text, pass_text, email_pass;
 
         //Збережена авторизація, автопідключення
@@ -140,23 +161,5 @@ public class SplashScreenActivity extends AppCompatActivity {
                     }
 
                 });
-    }
-
-
-    private void animation() {
-        logo.setBackgroundResource(R.drawable.splash_screen_animation);
-        animationDrawable = (AnimationDrawable) logo.getBackground();
-    }
-
-    private void start_main_activity(){
-        Intent intent = new Intent(SplashScreenActivity.this,Main2Activity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        animationDrawable.start();
     }
 }

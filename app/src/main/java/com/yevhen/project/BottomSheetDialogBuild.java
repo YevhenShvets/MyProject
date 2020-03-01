@@ -171,13 +171,18 @@ public class BottomSheetDialogBuild extends BottomSheetDialog {
             image.setOnClickListener(new DoubleClickListener() {
                 @Override
                 public void onSingleClick(View v) {
-                    if(v.getBackgroundTintList() == ColorStateList.valueOf(Color.parseColor("#CBE8E8EC")))
-                        v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E2FDC15D")));
-                    else
-                        v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CBE8E8EC")));
-                    //міняти розмір працює
-                    //v.setLayoutParams(new FrameLayout.LayoutParams(50,50));
-                    v.startAnimation(animation);
+                    if(!MainFragment.create_mode) {
+                        MyObject myObject = ((ImageIcon) v).getObject();
+                        if (v.getBackgroundTintList() == ColorStateList.valueOf(Color.parseColor("#CBE8E8EC"))) {
+                            myObject.setStatus(true);
+                            v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E2FDC15D")));
+                        } else {
+                            myObject.setStatus(false);
+                            v.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CBE8E8EC")));
+                        }
+                        ((ImageIcon) v).setObject(myObject);
+                        v.startAnimation(animation);
+                    }
                 }
 
                 @Override
@@ -186,6 +191,7 @@ public class BottomSheetDialogBuild extends BottomSheetDialog {
 
                 }
             });
+
             if(((ImageIcon)image).getObject().isStatus())  image.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#E2FDC15D")));
             else
                 image.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#CBE8E8EC")));

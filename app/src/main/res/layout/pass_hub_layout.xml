@@ -6,55 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <ImageView
-        android:id="@+id/pass_remove"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/icon_remove"
-        app:layout_constraintEnd_toEndOf="@+id/pass_v2"
-        app:layout_constraintTop_toBottomOf="@+id/pass_v2"></ImageView>
-
-    <ImageView
-        android:id="@+id/pass_button1"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/background_icon"
-        android:backgroundTint="#F57F17"
-        android:contentDescription="TODO"
-        android:src="@drawable/icon_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pass_v1" />
-
-    <ImageView
-        android:id="@+id/pass_button2"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/background_icon"
-        android:backgroundTint="#F57F17"
-        android:contentDescription="TODO"
-        android:src="@drawable/icon_button"
-        app:layout_constraintEnd_toStartOf="@+id/pass_button3"
-        app:layout_constraintStart_toEndOf="@+id/pass_button1"
-        app:layout_constraintTop_toBottomOf="@+id/pass_v1" />
-
-    <ImageView
-        android:id="@+id/pass_button3"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/background_icon"
-        android:backgroundTint="#F57F17"
-        android:contentDescription="TODO"
-        android:src="@drawable/icon_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pass_v1" />
-
     <Button
         android:id="@+id/pass_button_enter"
         android:layout_width="wrap_content"
@@ -89,139 +40,115 @@
         android:id="@+id/pass_v2"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="64dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/dialog_background"
-        app:layout_constraintTop_toBottomOf="@+id/pass_title_img"
-        tools:layout_editor_absoluteX="16dp" >
-    </View>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/pass_title_img"></View>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:foregroundGravity="center_horizontal"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/pass_v2"
         app:layout_constraintEnd_toEndOf="@+id/pass_v2"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/pass_v2">
 
-        <ImageView
-            android:id="@+id/pass_img_1"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+        <EditText
+            android:id="@+id/pass_edit_1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/background_icon"
-            android:orientation="vertical"
-            android:scaleType="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
+            android:fontFamily="@font/my_font_sony"
+            android:maxLength="1"
+            android:textAlignment="center"
+            android:textColor="@color/Black"
+            android:textSize="25sp"></EditText>
 
-        <ImageView
-            android:id="@+id/pass_img_2"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="8dp"
+        <EditText
+            android:id="@+id/pass_edit_2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
             android:background="@drawable/background_icon"
-            android:orientation="vertical"
-            android:scaleType="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/pass_img_1"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
+            android:fontFamily="@font/my_font_sony"
+            android:maxLength="1"
+            android:textAlignment="center"
+            android:textColor="@color/Black"
+            android:textSize="25sp"></EditText>
 
-        <ImageView
-            android:id="@+id/pass_img_3"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="8dp"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="-"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="40sp"></TextView>
+
+        <EditText
+            android:id="@+id/pass_edit_3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/background_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/pass_img_2"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
+            android:fontFamily="@font/my_font_sony"
+            android:maxLength="1"
+            android:textAlignment="center"
+            android:textColor="@color/Black"
+            android:textSize="25sp"></EditText>
 
-        <ImageView
-            android:id="@+id/pass_img_4"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="8dp"
+        <EditText
+            android:id="@+id/pass_edit_4"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
             android:background="@drawable/background_icon"
-            android:orientation="vertical"
-            android:scaleType="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/pass_img_3"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
+            android:fontFamily="@font/my_font_sony"
+            android:maxLength="1"
+            android:textAlignment="center"
+            android:textColor="@color/Black"
+            android:textSize="25sp"></EditText>
 
-        <ImageView
-            android:id="@+id/pass_img_5"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="8dp"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="-"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="40sp"></TextView>
+
+        <EditText
+            android:id="@+id/pass_edit_5"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/background_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/pass_img_4"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
+            android:fontFamily="@font/my_font_sony"
+            android:maxLength="1"
+            android:textAlignment="center"
+            android:textColor="@color/Black"
+            android:textSize="25sp"></EditText>
 
-        <ImageView
-            android:id="@+id/pass_img_6"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="8dp"
+        <EditText
+            android:id="@+id/pass_edit_6"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
             android:background="@drawable/background_icon"
-            android:orientation="vertical"
-            android:scaleType="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/pass_img_4"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
-
-        <ImageView
-            android:id="@+id/pass_img_7"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/background_icon"
-            android:orientation="vertical"
-            android:scaleType="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/pass_img_6"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
-
-        <ImageView
-            android:id="@+id/pass_img_8"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/background_icon"
-            android:orientation="vertical"
-            android:scaleType="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/pass_img_7"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
-
-        <ImageView
-            android:id="@+id/pass_img_9"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/background_icon"
-            android:orientation="vertical"
-            android:scaleType="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/pass_img_8"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
-
-        <ImageView
-            android:id="@+id/pass_img_10"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/background_icon"
-            android:orientation="vertical"
-            android:scaleType="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/pass_img_9"
-            app:layout_constraintTop_toTopOf="parent"></ImageView>
-
-
+            android:fontFamily="@font/my_font_sony"
+            android:maxLength="1"
+            android:textAlignment="center"
+            android:textColor="@color/Black"
+            android:textSize="25sp"></EditText>
     </LinearLayout>
 
     <ImageView
@@ -234,5 +161,4 @@
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"></ImageView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

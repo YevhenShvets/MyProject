@@ -32,7 +32,8 @@
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
-            android:theme="@style/NOACTIONBAR_" />
+            android:theme="@style/NOACTIONBAR_"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".RegistrationActivity"
             android:theme="@style/LOGINTHEME"/>
         <activity android:name=".LoginActivity"
