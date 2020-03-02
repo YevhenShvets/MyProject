@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -26,6 +27,8 @@ import com.google.firebase.iid.InstanceIdResult;
 import com.yevhen.project.Class.Users;
 import com.yevhen.project.Class.Users_log;
 
+import java.lang.reflect.Array;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,8 +37,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SplashScreenActivity extends AppCompatActivity {
     private Context context = this;
-
-    private MyResponse myResponse;
     private File file;
 
     public ImageView logo;
@@ -47,6 +48,18 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
         logo = (ImageView) findViewById(R.id.splash_logo);
         animation();
+
+
+        char ch[];
+        String st = "V7RZE";
+        ch = new char[5];
+        for(int i=0;i<5;i++){
+            ch[i] = st.charAt(i);
+        }
+
+        Log.i("ENC",Encryption.Encrypt("ВАСЯ", ch));
+        Log.i("ENC",Encryption.Decrypt("J2J5M6P6", ch));
+
 
         start();
     }
@@ -125,6 +138,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                             if (response.body() != null) {
                                 MyResponse.user = response.body();
                                 start_main_activity();
+                                Log.i("USERS",response.body().getFcmToken());
                             }
                         }
                     }
@@ -153,6 +167,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                         // Get new Instance ID token
                         String token = task.getResult().getToken();
+                        Log.i("FIREBASE",token);
 
                         // Log and toast
                         String msg = token;
