@@ -4,12 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ActionMode;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -49,18 +56,41 @@ public class SplashScreenActivity extends AppCompatActivity {
         logo = (ImageView) findViewById(R.id.splash_logo);
         animation();
 
+    /*//Сповіщення
+        createNotificationChannel();
 
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "32")
+                .setSmallIcon(R.drawable.icon_settings)
+                .setContentTitle("HALLO")
+                .setContentText("HOOO dasfsdfsdwfe")
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText("Mfdsfffswwgggegwgewgewegwgewegwegwwgewgewgegwe"))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+
+// notificationId is a unique int for each notification that you must define
+        notificationManager.notify(32, builder.build());
+
+        builder = new NotificationCompat.Builder(this,"32")
+                .setSmallIcon(R.drawable.icon_settings)
+                .setContentTitle("2")
+                .setContentText("HOOO 2")
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText("2"))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        notificationManager.notify(31, builder.build());*/
+//ENC
         char ch[];
         String st = "V7RZE";
         ch = new char[5];
         for(int i=0;i<5;i++){
             ch[i] = st.charAt(i);
         }
-
         Log.i("ENC",Encryption.Encrypt("ВАСЯ", ch));
         Log.i("ENC",Encryption.Decrypt("J2J5M6P6", ch));
-
-
+//enc
         start();
     }
 
@@ -176,5 +206,22 @@ public class SplashScreenActivity extends AppCompatActivity {
                     }
 
                 });
+    }
+
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.channel_name);
+            String description = getString(R.string.channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("32", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }

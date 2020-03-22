@@ -16,6 +16,20 @@ import java.net.UnknownHostException;
 
 public final class Function extends Application {
 
+    public static boolean equals(String a,String b){
+        String str = a;
+
+        a = "";
+        for(int i=1;i<str.length()-1;i++){
+            a+=str.charAt(i);
+        }
+        if(b.length()!=a.length()) return false;
+        boolean bbb = true;
+        for(int i=0;i<a.length();i++){
+                if(a.charAt(i) != b.charAt(i)) bbb = false;
+        }
+        return bbb;
+    }
     public boolean isOnline(Context context) {
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE);

@@ -3,12 +3,17 @@ package com.yevhen.project;
 import android.content.Context;
 import android.graphics.Color;
 import android.icu.text.UnicodeSetSpanner;
+import android.net.wifi.WifiConfiguration;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 public class Pass_hub_fragment extends Fragment {
 
     private Animation animation;
@@ -32,32 +38,29 @@ public class Pass_hub_fragment extends Fragment {
     private int edit_count =6;
     private EditText[] edits;
 
+    private WifiManager wifiManager;
+    private final String SSID = "MyHomeInternet";
+    private final String PASS = "pass12345678";
+
+    private LoadingDialog ld;
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Local_Global_Activity.open_bollean = false;
+    }
 
     public Pass_hub_fragment() {
         // Required empty public constructor
     }
 
+
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         animation = AnimationUtils.loadAnimation(getContext(), R.anim.scaling);
-        View view = inflater.inflate(R.layout.or_layout, container, false);
-        ImageView local_img = view.findViewById(R.id.local_or);
-        ImageView global_img = view.findViewById(R.id.global_or);
-
-        local_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(animation);
-            }
-        });
-        global_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                v.startAnimation(animation);
-            }
-        });
-        /*index=0;
+        View view = inflater.inflate(R.layout.pass_hub_layout, container, false);
+        index=0;
         edits = new EditText[6];
         button_enter = view.findViewById(R.id.pass_button_enter);
 
@@ -98,11 +101,48 @@ public class Pass_hub_fragment extends Fragment {
             public void onClick(View v) {
                 get_text();
             }
-        });*/
+        });
+
+        //підключення до WIFI
+        connect_to_wifi(SSID,PASS);
+
+        ld  = new LoadingDialog(getActivity());
+        stop();
         return view;
     }
 
+    private void connect_to_wifi(String ssid, String pass){
+        WifiConfiguration wifiConfig = new WifiConfiguration();
+        wifiConfig.SSID = String.format("\"%s\"", ssid);
+        wifiConfig.preSharedKey = String.format("\"%s\"", pass);
 
+        wifiManager = (WifiManager) getContext().getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+        //remember id
+        if(!wifiManager.isWifiEnabled()){
+            wifiManager.setWifiEnabled(true);
+        }
+        int netId = wifiManager.addNetwork(wifiConfig);
+        wifiManager.disconnect();
+        wifiManager.enableNetwork(netId, true);
+        wifiManager.reconnect();
+    }
+
+    private void stop(){
+        ld.show();
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(!Function.equals(wifiManager.getConnectionInfo().getSSID().toString(),SSID)){
+                    Log.i("WIFIControl",wifiManager.getConnectionInfo().getSSID());
+                    stop();
+                }else {
+                    ld.dismiss();
+                }
+            }},1500);
+    }
+
+    //Функції для роботи з заповненням та анімацією коду вводу
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -122,7 +162,6 @@ public class Pass_hub_fragment extends Fragment {
 
         }
     };
-
     private void next(){
         if(index+1<edit_count) {
             edits[++index].setFocusable(true);
@@ -136,7 +175,6 @@ public class Pass_hub_fragment extends Fragment {
             index--;
         }
     }
-
     private void clear_all(){
         for(int i=0;i<edits.length;i++){
             edits[i].setText("");
@@ -144,11 +182,9 @@ public class Pass_hub_fragment extends Fragment {
         index=0;
         edits[index].requestFocus();
     }
-
     private void anim(){
         edits[index].startAnimation(animation);
     }
-
     private void get_text(){
         String str= "";
         for(int i=0;i<edits.length;i++){

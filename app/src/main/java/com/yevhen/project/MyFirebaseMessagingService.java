@@ -17,16 +17,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    @Override
-    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-        Log.i("FIREBASE", "Message was received!");
-    }
+  @Override
+  public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
+    Log.i("FIREBASE", "Message was received!");
+  }
 
-    @Override
-    public void onNewToken(@NonNull String s) {
-        MyResponse myResponse = new MyResponse(getApplicationContext(),"");
-        myResponse.putToken(MyResponse.user.getId(),MyResponse.user.getAccessToken(),s);
-    }
+  @Override
+  public void onNewToken(@NonNull String s) {
+    MyResponse myResponse = new MyResponse(getApplicationContext(),"");
+    myResponse.putToken(MyResponse.user.getId(),MyResponse.user.getAccessToken(),s);
+  }
 
 
 

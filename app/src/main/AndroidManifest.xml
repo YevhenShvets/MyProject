@@ -8,9 +8,9 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-
 
     <dist:module dist:instant="true" />
 
@@ -22,8 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".SplashScreenActivity"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity android:name=".Local_Global_Activity"
+            android:theme="@style/NOACTIONBAR_">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,25 +31,30 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".SplashScreenActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+        </activity>
+        <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
             android:theme="@style/NOACTIONBAR_"
-            android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".RegistrationActivity"
-            android:theme="@style/LOGINTHEME"/>
-        <activity android:name=".LoginActivity"
-            android:theme="@style/LOGINTHEME"/>
-        <activity android:name=".Connect_to_wifi"
-            android:theme="@style/NOACTIONBAR_"/>
-        <activity android:name=".MainActivity"
-            android:theme="@style/NOACTIONBAR_">
-
-        </activity>
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".RegistrationActivity"
+            android:theme="@style/LOGINTHEME" />
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/LOGINTHEME" />
+        <activity
+            android:name=".Connect_to_wifi"
+            android:theme="@style/NOACTIONBAR_" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/NOACTIONBAR_"></activity>
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
 
         <service
             android:name=".MyFirebaseMessagingService"
@@ -58,7 +63,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>
